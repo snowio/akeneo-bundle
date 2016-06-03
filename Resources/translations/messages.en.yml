@@ -1,0 +1,37 @@
+snowio_csv:
+
+    ## Job titles
+    jobs:
+        snowio_csv_product_export:
+            title: Snow.io CSV Product export
+            post.title: Post CSV file
+        snowio_csv_category_export:
+            title: Snow.io CSV Category export
+            post.title: Post CSV file
+        snowio_csv_attribute_export:
+            title: Snow.io CSV Attribute export
+            post.title: Post CSV file
+        snowio_csv_attribute_option_export:
+            title: Snow.io CSV Attribute option export
+            post.title: Post CSV file
+        snowio_csv_association_type_export:
+            title: Snow.io CSV Association type export
+            post.title: Post CSV file
+        snowio_csv_group_export:
+            title: Snow.io CSV Group export
+            post.title: Post CSV file
+        snowio_csv_variant_group_export:
+            title: Snow.io CSV Variant group export
+            post.title: Post CSV file
+
+    # Form labels and help guides
+    form:
+        url:
+            label: Url
+            help: The URL where to make the request after file generation.
+        handlerType:
+            label: Handler Type
+        applicationId:
+            label: Application Id
+        secretKey:
+            label: Secret Key

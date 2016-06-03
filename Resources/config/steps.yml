@@ -1,0 +1,4 @@
+parameters:
+    snowio_csv_connector.step.post.class:  Snowio\Bundle\CsvConnectorBundle\Step\PostStep
+    snowio_csv_connector.handler.post.class: Snowio\Bundle\CsvConnectorBundle\Handler\PostHandler
+    guzzlehttp.client: GuzzleHttp\Client

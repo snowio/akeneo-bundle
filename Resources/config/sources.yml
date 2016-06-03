@@ -1,0 +1,2 @@
+parameters:
+    snowio.source.handlerType: Snowio\Bundle\CsvConnectorBundle\Source\HandlerType
