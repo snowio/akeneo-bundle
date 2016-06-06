@@ -49,6 +49,10 @@ class PostHandler extends AbstractConfigurableStepElement implements StepExecuti
         $this->stepExecution->addSummaryInfo('url', $url);
 
         $resource = fopen($this->getFilePath(), 'r');
+        
+        if (false === $resource) {
+            throw new \RuntimeException('Failed to open file to send to snow.io');
+        }
 
         $response = $this->client->request(
             'POST',
