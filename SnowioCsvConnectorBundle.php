@@ -15,5 +15,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class SnowioCsvConnectorBundle extends Bundle
 {
-
+    /** Increment the version number if exported data has BC break changes. */
+    const VERSION = 1;
 }

@@ -1,36 +1,24 @@
-snowio_csv:
+snowio_connector:
 
-    ## Job titles
+    # Job titles
     jobs:
-        snowio_csv_product_export:
-            title: Snow.io CSV Product export
-            post.title: Post CSV file
-        snowio_csv_category_export:
-            title: Snow.io CSV Category export
-            post.title: Post CSV file
-        snowio_csv_attribute_export:
-            title: Snow.io CSV Attribute export
-            post.title: Post CSV file
-        snowio_csv_attribute_option_export:
-            title: Snow.io CSV Attribute option export
-            post.title: Post CSV file
-        snowio_csv_association_type_export:
-            title: Snow.io CSV Association type export
-            post.title: Post CSV file
-        snowio_csv_group_export:
-            title: Snow.io CSV Group export
-            post.title: Post CSV file
-        snowio_csv_variant_group_export:
-            title: Snow.io CSV Variant group export
-            post.title: Post CSV file
+        incomplete_export:
+            title: Snow.IO CSV incomplete export (categories, attributes, attribute options, and families)
+            archive.title: Zip CSV files
+            post.title: Post Zip file
+        complete_export:
+            title: Snow.IO CSV complete export (products, variant groups, categories, attributes, attribute options, and families)
+            archive.title: Zip CSV files
+            post.title: Post Zip file
 
     # Form labels and help guides
     form:
+        exportDir:
+            label: Export Directory
+            help: The directory to store CSV and ZIP files.
         url:
             label: Url
             help: The URL where to make the request after file generation.
-        handlerType:
-            label: Handler Type
         applicationId:
             label: Application Id
         secretKey:

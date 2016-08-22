@@ -14,29 +14,22 @@ class PostHandler extends AbstractConfigurableStepElement implements StepExecuti
     /** @var string */
     protected $url;
     /** @var string */
-    protected $filePath;
-    /** @var string */
-    protected $handlerType;
+    protected $exportDir;
     /** @var string */
     protected $applicationId;
     /** @var string */
     protected $secretKey;
-    /** @var \Snowio\Bundle\CsvConnectorBundle\Source\HandlerType */
-    protected $handlerTypeSource;
-    protected $resolvedFilePath;
     /** @var \GuzzleHttp\Client */
     protected $client;
 
     /**
      * PostHandler constructor.
      * @param \GuzzleHttp\ClientInterface $client
-     * @param \Snowio\Bundle\CsvConnectorBundle\Source\HandlerType $handlerTypeSource
      * @author Cristian Quiroz <cq@amp.co>
      */
-    public function __construct(ClientInterface $client, $handlerTypeSource)
+    public function __construct(ClientInterface $client)
     {
         $this->client = $client;
-        $this->handlerTypeSource = $handlerTypeSource;
     }
 
     /**
@@ -48,10 +41,11 @@ class PostHandler extends AbstractConfigurableStepElement implements StepExecuti
         $url = $this->getUrl() . $this->getApplicationId();
         $this->stepExecution->addSummaryInfo('url', $url);
 
-        $resource = fopen($this->getFilePath(), 'r');
+        $resource = fopen(rtrim($this->exportDir, '/') . DIRECTORY_SEPARATOR . ArchiveHandler::ZIP_FILE_NAME, 'r');
         
         if (false === $resource) {
-            throw new \RuntimeException('Failed to open file to send to snow.io');
+            $this->stepExecution->addFailureException(new \RuntimeException('Failed to open file to send to snow.io'));
+            return;
         }
 
         $response = $this->client->request(
@@ -60,8 +54,7 @@ class PostHandler extends AbstractConfigurableStepElement implements StepExecuti
             [
                 'body'      => $resource,
                 'headers'   => [
-                    'Content-Type'          => 'text/csv',
-                    'SnowIO-Resource-Id'    => $this->getHandlerType(),
+                    'Content-Type'          => 'application/zip',
                     'Authorization'         => $this->getSecretKey(),
                 ],
             ]
@@ -72,7 +65,7 @@ class PostHandler extends AbstractConfigurableStepElement implements StepExecuti
 
         if ($response->getStatusCode() !== 200) {
 //             Unexpected response, handle
-            throw new \Exception('Failed to POST csv data: ' . $response->getBody());
+            $this->stepExecution->addFailureException(new \Exception('Failed to POST csv data: ' . $response->getBody()));
         }
 
     }
@@ -87,13 +80,13 @@ class PostHandler extends AbstractConfigurableStepElement implements StepExecuti
     }
 
     /**
-     * @param string $filePath
+     * @param string $exportDir
      * @return $this
      * @author Cristian Quiroz <cq@amp.co>
      */
-    public function setFilePath($filePath)
+    public function setExportDir($exportDir)
     {
-        $this->filePath = $filePath;
+        $this->exportDir = $exportDir;
 
         return $this;
     }
@@ -102,30 +95,9 @@ class PostHandler extends AbstractConfigurableStepElement implements StepExecuti
      * @return string
      * @author Cristian Quiroz <cq@amp.co>
      */
-    public function getFilePath()
+    public function getExportDir()
     {
-        return $this->filePath;
-    }
-
-    /**
-     * @param string $handlerType
-     * @return $this
-     * @author Cristian Quiroz <cq@amp.co>
-     */
-    public function setHandlerType($handlerType)
-    {
-        $this->handlerType = $handlerType;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     * @author Cristian Quiroz <cq@amp.co>
-     */
-    public function getHandlerType()
-    {
-        return $this->handlerType;
+        return $this->exportDir;
     }
 
     /**
@@ -188,7 +160,6 @@ class PostHandler extends AbstractConfigurableStepElement implements StepExecuti
     }
 
     /**
-     * TODO: Hide Url, delimiter and enclosure
      * Here, we define the form fields to use
      * @return array
      * @author Cristian Quiroz <cq@amp.co>
@@ -196,58 +167,34 @@ class PostHandler extends AbstractConfigurableStepElement implements StepExecuti
     public function getConfigurationFields()
     {
         return [
-                'filePath' => [
+                'exportDir' => [
                     'options' => [
-                        'label' => 'pim_connector.export.filePath.label',
-                        'help'  => 'pim_connector.export.filePath.help',
-                    ],
+                        'label' => 'snowio_connector.form.exportDir.label',
+                        'help'  => 'snowio_connector.form.exportDir.help'
+                    ]
                 ],
                 'url' => [
                     'type' => 'text',
                     'required' => true,
                     'options' => [
-                        'label' => 'snowio_csv.form.url.label',
-                        'help'  => 'snowio_csv.form.url.help'
-                    ],
-                ],
-                'handlerType' => [
-                    'type' => 'choice',
-                    'options' => [
-                        'choices' => $this->getSnowioHandlerTypeChoices(),
-                        'required' => true,
-                        'label' => 'snowio_csv.form.handlerType.label',
+                        'label' => 'snowio_connector.form.url.label',
+                        'help'  => 'snowio_connector.form.url.help'
                     ],
                 ],
                 'applicationId' => [
                     'type' => 'text',
                     'required' => true,
                     'options' => [
-                        'label' => 'snowio_csv.form.applicationId.label',
+                        'label' => 'snowio_connector.form.applicationId.label',
                     ],
                 ],
                 'secretKey' => [
                     'type' => 'password',
                     'required' => true,
                     'options' => [
-                        'label' => 'snowio_csv.form.secretKey.label',
+                        'label' => 'snowio_connector.form.secretKey.label',
                     ],
                 ],
             ];
-    }
-
-    /**
-     * @return array
-     * @author Cristian Quiroz <cq@amp.co>
-     */
-    private function getSnowioHandlerTypeChoices()
-    {
-        $handlerTypes = $this->handlerTypeSource->getAllTypes();
-
-        $choices = [];
-        foreach ($handlerTypes as $handlerType) {
-            $choices[$handlerType] = $handlerType;
-        }
-
-        return $choices;
     }
 }

@@ -1,0 +1,32 @@
+parameters:
+  snowio_connector.writer.file.csv_product.class: Snowio\Bundle\CsvConnectorBundle\Writer\File\CsvProductWriter
+  snowio_connector.writer.file.csv_variant_group.class: Snowio\Bundle\CsvConnectorBundle\Writer\File\CsvVariantGroupWriter
+  snowio_connector.writer.file.category.class: Snowio\Bundle\CsvConnectorBundle\Writer\File\CategoryWriter
+  snowio_connector.writer.file.attribute.class: Snowio\Bundle\CsvConnectorBundle\Writer\File\AttributeWriter
+  snowio_connector.writer.file.attribute_option.class: Snowio\Bundle\CsvConnectorBundle\Writer\File\AttributeOptionWriter
+  snowio_connector.writer.file.family.class: Snowio\Bundle\CsvConnectorBundle\Writer\File\FamilyWriter
+
+services:
+  snowio_connector.writer.file.csv_product:
+    class: %snowio_connector.writer.file.csv_product.class%
+    parent: pim_connector.writer.file.csv_product
+
+  snowio_connector.writer.file.csv_variant_group:
+    class: %snowio_connector.writer.file.csv_variant_group.class%
+    parent: pim_base_connector.writer.file.csv_variant_group
+
+  snowio_connector.writer.file.category:
+    class: %snowio_connector.writer.file.category.class%
+    parent: pim_connector.writer.file.simple_file
+
+  snowio_connector.writer.file.attribute:
+    class: %snowio_connector.writer.file.attribute.class%
+    parent: pim_connector.writer.file.simple_file
+
+  snowio_connector.writer.file.attribute_option:
+    class: %snowio_connector.writer.file.attribute_option.class%
+    parent: pim_connector.writer.file.simple_file
+
+  snowio_connector.writer.file.family:
+    class: %snowio_connector.writer.file.family.class%
+    parent: pim_connector.writer.file.simple_file

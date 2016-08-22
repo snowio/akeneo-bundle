@@ -1,0 +1,8 @@
+parameters:
+  snowio_connector.set_export_directory_date_subscriber.class: Snowio\Bundle\CsvConnectorBundle\EventSubscriber\ExportDirDateSubscriber
+
+services:
+  snowio_connector.set_export_directory_date_subscriber:
+    class: %snowio_connector.set_export_directory_date_subscriber.class%
+    tags:
+        - { name: kernel.event_subscriber }

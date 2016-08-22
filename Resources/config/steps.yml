@@ -1,4 +1,22 @@
 parameters:
-    snowio_csv_connector.step.post.class:  Snowio\Bundle\CsvConnectorBundle\Step\PostStep
-    snowio_csv_connector.handler.post.class: Snowio\Bundle\CsvConnectorBundle\Handler\PostHandler
+    snowio_connector.step.post.class:  Snowio\Bundle\CsvConnectorBundle\Step\PostStep
+    snowio_connector.handler.post.class: Snowio\Bundle\CsvConnectorBundle\Handler\PostHandler
+    snowio_connector.step.archive.class: Snowio\Bundle\CsvConnectorBundle\Step\ArchiveStep
+    snowio_connector.handler.metadata.class: Snowio\Bundle\CsvConnectorBundle\Handler\MetadataHandler
+    snowio_connector.handler.archive.class: Snowio\Bundle\CsvConnectorBundle\Handler\ArchiveHandler
     guzzlehttp.client: GuzzleHttp\Client
+
+services:
+    guzzlehttp.client:
+        class: %guzzlehttp.client%
+
+    snowio_connector.handler.post:
+        class: %snowio_connector.handler.post.class%
+        arguments:
+            - @guzzlehttp.client
+
+    snowio_connector.handler.metadata:
+        class: %snowio_connector.handler.metadata.class%
+
+    snowio_connector.handler.archive:
+        class: %snowio_connector.handler.archive.class%

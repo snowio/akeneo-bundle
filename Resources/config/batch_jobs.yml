@@ -1,110 +1,95 @@
 connector:
-    name: Snowio Connector
+    name: SnowIO Connector
     jobs:
-        snowio_product_export:
-            title: snowio_csv.jobs.snowio_csv_product_export.title
+        snowio_incomplete_export:
+            title: snowio_connector.jobs.incomplete_export.title
             type:  export
             steps:
-                export:
-                    title:     pim_base_connector.jobs.csv_product_export.export.title
-                    services:
-                        reader:    pim_base_connector.reader.doctrine.product
-                        processor: pim_base_connector.processor.product_to_flat_array
-                        writer:    pim_connector.writer.file.csv_product
-                    parameters:
-                        batch_size: 10
-                post:
-                    title:      snowio_csv.jobs.snowio_csv_product_export.post.title
-                    class:      %snowio_csv_connector.step.post.class%
-                    services:
-                        handler:   snowio_csv_connector.handler.post
-        snowio_category_export:
-            title: snowio_csv.jobs.snowio_csv_category_export.title
-            type:  export
-            steps:
-                export:
+                exportCategory:
                     title:     pim_base_connector.jobs.csv_category_export.export.title
                     services:
                         reader:    pim_base_connector.reader.orm.category
                         processor: pim_base_connector.processor.csv_serializer.homogeneous
-                        writer:    pim_connector.writer.file.simple_file
-                post:
-                    title:      snowio_csv.jobs.snowio_csv_category_export.post.title
-                    class:      %snowio_csv_connector.step.post.class%
-                    services:
-                        handler:   snowio_csv_connector.handler.post
-        snowio_attribute_export:
-            title: snowio_csv.jobs.snowio_csv_attribute_export.title
-            type:  export
-            steps:
-                export:
+                        writer:    snowio_connector.writer.file.category
+                exportAttribute:
                     title:     pim_base_connector.jobs.csv_attribute_export.export.title
                     services:
                         reader:    pim_base_connector.reader.orm.attribute
                         processor: pim_base_connector.processor.csv_serializer.homogeneous
-                        writer:    pim_base_connector.writer.file
-                post:
-                    title:      snowio_csv.jobs.snowio_csv_attribute_export.post.title
-                    class:      %snowio_csv_connector.step.post.class%
-                    services:
-                        handler:   snowio_csv_connector.handler.post
-        snowio_attribute_option_export:
-            title: snowio_csv.jobs.snowio_csv_attribute_option_export.title
-            type:  export
-            steps:
-                export:
+                        writer:    snowio_connector.writer.file.attribute
+                exportAttributeOption:
                     title:     pim_base_connector.jobs.csv_attribute_option_export.export.title
                     services:
                         reader:    pim_base_connector.reader.orm.attribute_option
                         processor: pim_base_connector.processor.csv_serializer.homogeneous
-                        writer:    pim_connector.writer.file.simple_file
-                post:
-                    title:      snowio_csv.jobs.snowio_csv_attribute_option_export.post.title
-                    class:      %snowio_csv_connector.step.post.class%
+                        writer:    snowio_connector.writer.file.attribute_option
+                exportFamily:
+                    title:     pim_base_connector.jobs.csv_family_export.export.title
                     services:
-                        handler:   snowio_csv_connector.handler.post
-        snowio_association_type_export:
-            title: snowio_csv.jobs.snowio_csv_association_type_export.title
+                        reader:    pim_base_connector.reader.orm.family
+                        processor: pim_base_connector.processor.normalization.family.flat
+                        writer:    snowio_connector.writer.file.family
+                archive:
+                    title:     snowio_connector.jobs.catalog_export.archive.title
+                    class:      %snowio_connector.step.archive.class%
+                    services:
+                        metadata:   snowio_connector.handler.metadata
+                        archive:    snowio_connector.handler.archive
+                post:
+                    title:      snowio_connector.jobs.catalog_export.post.title
+                    class:      %snowio_connector.step.post.class%
+                    services:
+                        post:   snowio_connector.handler.post
+        snowio_complete_export:
+            title: snowio_connector.jobs.complete_export.title
             type:  export
             steps:
-                export:
-                    title:     pim_base_connector.jobs.csv_association_type_export.export.title
+                exportProduct:
+                    title:     pim_base_connector.jobs.csv_product_export.export.title
                     services:
-                        reader:    pim_base_connector.reader.orm.association_type
-                        processor: pim_base_connector.processor.csv_serializer.homogeneous
-                        writer:    pim_connector.writer.file.simple_file
-                post:
-                    title:      snowio_csv.jobs.snowio_csv_association_type_export.post.title
-                    class:      %snowio_csv_connector.step.post.class%
-                    services:
-                        handler:   snowio_csv_connector.handler.post
-        snowio_group_export:
-            title: snowio_csv.jobs.snowio_csv_group_export.title
-            type:  export
-            steps:
-                export:
-                    title:     pim_base_connector.jobs.csv_group_export.export.title
-                    services:
-                        reader:    pim_base_connector.reader.repository.group
-                        processor: pim_base_connector.processor.normalization.csv_group
-                        writer:    pim_connector.writer.file.simple_file
-                post:
-                    title:      snowio_csv.jobs.snowio_csv_group_export.post.title
-                    class:      %snowio_csv_connector.step.post.class%
-                    services:
-                        handler:   snowio_csv_connector.handler.post
-        snowio_variant_group_export:
-            title: snowio_csv.jobs.snowio_csv_variant_group_export.title
-            type:  export
-            steps:
-                export:
+                        reader:    pim_base_connector.reader.doctrine.product
+                        processor: pim_base_connector.processor.product_to_flat_array
+                        writer:    snowio_connector.writer.file.csv_product
+                    parameters:
+                        batch_size: 10
+                exportVariantGroup:
                     title:     pim_base_connector.jobs.csv_variant_group_export.export.title
                     services:
                         reader:    pim_base_connector.reader.repository.variant_group
                         processor: pim_base_connector.processor.normalization.csv_variant_group
-                        writer:    pim_base_connector.writer.file.csv_variant_group
-                post:
-                    title:      snowio_csv.jobs.snowio_csv_variant_group_export.post.title
-                    class:      %snowio_csv_connector.step.post.class%
+                        writer:    snowio_connector.writer.file.csv_variant_group
+                exportCategory:
+                    title:     pim_base_connector.jobs.csv_category_export.export.title
                     services:
-                        handler:   snowio_csv_connector.handler.post
+                        reader:    pim_base_connector.reader.orm.category
+                        processor: pim_base_connector.processor.csv_serializer.homogeneous
+                        writer:    snowio_connector.writer.file.category
+                exportAttribute:
+                    title:     pim_base_connector.jobs.csv_attribute_export.export.title
+                    services:
+                        reader:    pim_base_connector.reader.orm.attribute
+                        processor: pim_base_connector.processor.csv_serializer.homogeneous
+                        writer:    snowio_connector.writer.file.attribute
+                exportAttributeOption:
+                    title:     pim_base_connector.jobs.csv_attribute_option_export.export.title
+                    services:
+                        reader:    pim_base_connector.reader.orm.attribute_option
+                        processor: pim_base_connector.processor.csv_serializer.homogeneous
+                        writer:    snowio_connector.writer.file.attribute_option
+                exportFamily:
+                    title:     pim_base_connector.jobs.csv_family_export.export.title
+                    services:
+                        reader:    pim_base_connector.reader.orm.family
+                        processor: pim_base_connector.processor.normalization.family.flat
+                        writer:    snowio_connector.writer.file.family
+                archive:
+                    title:     snowio_connector.jobs.catalog_export.archive.title
+                    class:      %snowio_connector.step.archive.class%
+                    services:
+                        metadata:   snowio_connector.handler.metadata
+                        archive:    snowio_connector.handler.archive
+                post:
+                    title:      snowio_connector.jobs.catalog_export.post.title
+                    class:      %snowio_connector.step.post.class%
+                    services:
+                        post:   snowio_connector.handler.post

@@ -5,12 +5,12 @@ namespace Snowio\Bundle\CsvConnectorBundle\Step;
 use Akeneo\Component\Batch\Model\StepExecution;
 use Akeneo\Component\Batch\Item\AbstractConfigurableStepElement;
 use Akeneo\Component\Batch\Step\AbstractStep;
+use Snowio\Bundle\CsvConnectorBundle\Handler\PostHandler;
 
 class PostStep extends AbstractStep
 {
-
-    /** @var AbstractConfigurableStepElement */
-    protected $handler;
+    /** @var  PostHandler */
+    protected $post;
 
     /**
      * @param \Akeneo\Component\Batch\Model\StepExecution $stepExecution
@@ -19,8 +19,8 @@ class PostStep extends AbstractStep
     protected function doExecute(StepExecution $stepExecution)
     {
         // inject the step execution in the step item to be able to log summary info during execution
-        $this->handler->setStepExecution($stepExecution);
-        $this->handler->execute();
+        $this->post->setStepExecution($stepExecution);
+        $this->post->execute();
     }
 
     /**
@@ -63,18 +63,18 @@ class PostStep extends AbstractStep
      * @return \Akeneo\Component\Batch\Step\StepExecutionAwareInterface
      * @author Cristian Quiroz <cq@amp.co>
      */
-    public function getHandler()
+    public function getPost()
     {
-        return $this->handler;
+        return $this->post;
     }
 
     /**
-     * @param \Akeneo\Component\Batch\Step\StepExecutionAwareInterface $handler
+     * @param \Akeneo\Component\Batch\Step\StepExecutionAwareInterface $post
      * @author Cristian Quiroz <cq@amp.co>
      */
-    public function setHandler($handler)
+    public function setPost($post)
     {
-        $this->handler = $handler;
+        $this->post = $post;
     }
 
     /**
@@ -85,7 +85,7 @@ class PostStep extends AbstractStep
     public function getConfigurableStepElements()
     {
         return [
-            'handler' => $this->getHandler(),
+            'post' => $this->getPost(),
         ];
     }
 }

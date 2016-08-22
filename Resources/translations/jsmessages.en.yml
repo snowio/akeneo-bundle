@@ -1,0 +1,6 @@
+job_execution:
+    summary:
+        zip_location: Zip File Location
+        url: Send Zip to Endpoint
+        response_code: Response Code
+        response_body: Response Body
