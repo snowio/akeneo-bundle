@@ -2,10 +2,10 @@
 
 namespace Snowio\Bundle\CsvConnectorBundle\Writer\File;
 
-use Pim\Component\Connector\Writer\File\SimpleFileWriter;
+use Pim\Component\Connector\Writer\File\CsvWriter;
 use Snowio\Bundle\CsvConnectorBundle\Writer\FileWriterOverriderTrait;
 
-class FamilyWriter extends SimpleFileWriter
+class FamilyWriter extends CsvWriter
 {
     use FileWriterOverriderTrait;
 

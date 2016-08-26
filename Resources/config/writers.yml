@@ -17,16 +17,16 @@ services:
 
   snowio_connector.writer.file.category:
     class: %snowio_connector.writer.file.category.class%
-    parent: pim_connector.writer.file.simple_file
+    parent: pim_connector.writer.file.csv
 
   snowio_connector.writer.file.attribute:
     class: %snowio_connector.writer.file.attribute.class%
-    parent: pim_connector.writer.file.simple_file
+    parent: pim_connector.writer.file.csv
 
   snowio_connector.writer.file.attribute_option:
     class: %snowio_connector.writer.file.attribute_option.class%
-    parent: pim_connector.writer.file.simple_file
+    parent: pim_connector.writer.file.csv
 
   snowio_connector.writer.file.family:
     class: %snowio_connector.writer.file.family.class%
-    parent: pim_connector.writer.file.simple_file
+    parent: pim_connector.writer.file.csv

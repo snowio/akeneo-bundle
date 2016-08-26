@@ -1,0 +1,10 @@
+parameters:
+  snowio_connector.processor.normalization.class: Snowio\Bundle\CsvConnectorBundle\Processor\Normalization\Processor
+
+services:
+  snowio_connector.processor.normalization:
+    class: %snowio_connector.processor.normalization.class%
+    arguments:
+      - '@pim_serializer'
+      - '@pim_catalog.repository.locale'
+      - 'csv'
