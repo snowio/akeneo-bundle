@@ -15,6 +15,5 @@ class SnowioCsvConnectorExtension extends Extension
         $loader->load('steps.yml');
         $loader->load('processors.yml');
         $loader->load('writers.yml');
-        $loader->load('event_subscribers.yml');
     }
 }
