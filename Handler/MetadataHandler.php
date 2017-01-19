@@ -22,7 +22,7 @@ class MetadataHandler extends AbstractConfigurableStepElement implements StepExe
             json_encode([
                 'bundleVersion' => SnowioCsvConnectorBundle::VERSION,
                 'jobCode' => $this->stepExecution->getJobExecution()->getJobInstance()->getAlias(),
-                'date' => date('Y-m-d_H:i:s'),
+                'date' => gmdate('Y-m-d_H:i:s'),
                 'channel' => $this->configs['channel'],
                 'delimiter' => $this->configs['delimiter'],
                 'enclosure' => $this->configs['enclosure'],
