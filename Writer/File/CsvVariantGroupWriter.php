@@ -13,17 +13,8 @@ class CsvVariantGroupWriter extends BaseCsvVariantGroupWriter
     {
         $variantGroups = [];
 
-        if (!is_dir(dirname($this->getPath()))) {
-            mkdir(dirname($this->getPath()), 0777, true);
-        }
-
         foreach ($items as $item) {
             $variantGroups[] = $item['variant_group'];
-            foreach ($item['media'] as $media) {
-                if ($media && isset($media['filePath']) && $media['filePath']) {
-                    $this->copyMedia($media);
-                }
-            }
         }
 
         $this->items = array_merge($this->items, $variantGroups);
