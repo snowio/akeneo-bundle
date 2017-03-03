@@ -1,0 +1,20 @@
+parameters:
+    snowio_connector.job.job_parameters.constraint_collection_provider.product.class: Snowio\Bundle\CsvConnectorBundle\Job\JobParameters\ConstraintCollectionProvider\ProductConstraint
+    snowio_connector.job.job_parameters.constraint_collection_provider.simple.class: Snowio\Bundle\CsvConnectorBundle\Job\JobParameters\ConstraintCollectionProvider\SimpleConstraint
+
+services:
+    # Validation constraints for our JobParameters
+    snowio_connector.job.job_parameters.constraint_collection_provider.complete_export:
+          class: '%snowio_connector.job.job_parameters.constraint_collection_provider.product.class%'
+          arguments:
+              - '@pim_connector.job.job_parameters.constraint_collection_provider.simple_csv_export'
+              - ['complete_export']
+          tags:
+              - { name: akeneo_batch.job.job_parameters.constraint_collection_provider }
+
+    snowio_connector.job.job_parameters.constraint_collection_provider.incomplete_export:
+          class: '%snowio_connector.job.job_parameters.constraint_collection_provider.simple.class%'
+          arguments:
+              - ['incomplete_export']
+          tags:
+              - { name: akeneo_batch.job.job_parameters.constraint_collection_provider }

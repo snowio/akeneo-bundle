@@ -1,25 +1,44 @@
+batch_jobs:
+    incomplete_export:
+        label: "Incomplete export (categories, attributes, attribute options, and families)"
+        category.label:  "Category Export Step"
+        attribute.label: "Attribute Export Step"
+        attribute_option.label: "Attribute Option Export Step"
+        family.label: "Family Export Step"
+        archive.label: "Archive Step"
+        metadata.label: "Metadata Step"
+        post.label: "Post Step"
+    complete_export:
+        label: "Complete export (products, variant groups, categories, attributes, attribute options, and families)"
+        product.label: "Product Export Step"
+        variant_group.label: "Variant Group Export Step"
+        category.label:  "Category Export Step"
+        attribute.label: "Attribute Export Step"
+        attribute_option.label: "Attribute Option Export Step"
+        family.label: "Family Export Step"
+        archive.label: "Archive Step"
+        metadata.label: "Metadata Step"
+        post.label: "Post Step"
+
+job_execution:
+    summary:
+        endpoint: Endpoint
+        response_code: Response code
+        response_body: Body
+        zip_location: Zip file
+        metadata_location: Metadata file
+
 snowio_connector:
-
-    # Job titles
-    jobs:
-        incomplete_export:
-            title: Snow.IO CSV incomplete export (categories, attributes, attribute options, and families)
-            archive.title: Zip CSV files
-            post.title: Post Zip file
-        complete_export:
-            title: Snow.IO CSV complete export (products, variant groups, categories, attributes, attribute options, and families)
-            archive.title: Zip CSV files
-            post.title: Post Zip file
-
-    # Form labels and help guides
-    form:
-        exportDir:
-            label: Export Directory
-            help: The directory to store CSV and ZIP files.
-        url:
-            label: Url
+    export.csv:
+        endpoint:
+            label: Endpoint Url
             help: The URL where to make the request after file generation.
         applicationId:
             label: Application Id
+            help: The Application ID provided by Snow.io
         secretKey:
             label: Secret Key
+            help: The Secret Key provided by Snow.io
+        exportDir:
+            label: Export Directory
+            help: The directory to store CSV and ZIP files.

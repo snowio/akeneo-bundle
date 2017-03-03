@@ -2,90 +2,80 @@
 
 namespace Snowio\Bundle\CsvConnectorBundle\Step;
 
-use Akeneo\Component\Batch\Model\StepExecution;
-use Akeneo\Component\Batch\Item\AbstractConfigurableStepElement;
 use Akeneo\Component\Batch\Step\AbstractStep;
-use Snowio\Bundle\CsvConnectorBundle\Handler\PostHandler;
+use Akeneo\Component\Batch\Model\StepExecution;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Akeneo\Component\Batch\Job\JobRepositoryInterface;
+use GuzzleHttp\Client;
 
 class PostStep extends AbstractStep
 {
-    /** @var  PostHandler */
-    protected $post;
+    /** @var ClientInterface */
+    protected $guzzle;
 
     /**
-     * @param \Akeneo\Component\Batch\Model\StepExecution $stepExecution
-     * @author Cristian Quiroz <cq@amp.co>
+     * @param string                   $name
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param JobRepositoryInterface   $jobRepository
+     * @param Client                   $guzzle
+     */
+    public function __construct(
+        $name,
+        EventDispatcherInterface $eventDispatcher,
+        JobRepositoryInterface $jobRepository,
+        Client $guzzle
+    ) {
+        $this->name = $name;
+        $this->jobRepository = $jobRepository;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->guzzle = $guzzle;
+    }
+
+    /**
+     * Post Step will send the zip file generated on preview step
+     * to Snow.io
+     *
+     * @author Nei Rauni <nr@amp.co>
+     * @param StepExecution $stepExecution
      */
     protected function doExecute(StepExecution $stepExecution)
     {
-        // inject the step execution in the step item to be able to log summary info during execution
-        $this->post->setStepExecution($stepExecution);
-        $this->post->execute();
-    }
+        $jobParameters = $stepExecution->getJobParameters();
+        $endpoint = $jobParameters->get('endpoint') . $jobParameters->get('applicationId');
 
-    /**
-     * As step configuration, we merge the step items configuration
-     * @return array
-     * @author Cristian Quiroz <cq@amp.co>
-     */
-    public function getConfiguration()
-    {
-        $configuration = array();
-        foreach ($this->getConfigurableStepElements() as $stepElement) {
-            if ($stepElement instanceof AbstractConfigurableStepElement) {
-                foreach ($stepElement->getConfiguration() as $key => $value) {
-                    if (!isset($configuration[$key]) || $value) {
-                        $configuration[$key] = $value;
-                    }
-                }
-            }
+        $stepExecution->addSummaryInfo('endpoint', $endpoint);
+
+        $zipFile = rtrim($jobParameters->get('exportDir'), '/') . DIRECTORY_SEPARATOR . ArchiveStep::ZIP_FILE_NAME;
+
+        if (!file_exists($zipFile)) {
+            $stepExecution->addFailureException(
+                new \RuntimeException('Failed to open file '.$zipFile.' to send to snow.io')
+            );
         }
 
-        return $configuration;
-    }
-
-    /**
-     * We inject the configuration in each step item
-     * @param array $config
-     * @author Cristian Quiroz <cq@amp.co>
-     */
-    public function setConfiguration(array $config)
-    {
-        foreach ($this->getConfigurableStepElements() as $stepElement) {
-            if ($stepElement instanceof AbstractConfigurableStepElement) {
-                $stepElement->setConfiguration($config);
-            }
+        if (($resource = fopen($zipFile, 'r')) === false) {
+            $stepExecution->addFailureException(
+                new \RuntimeException('Failed to open file '.$zipFile.' to send to snow.io')
+            );
         }
-    }
 
-    /**
-     * These getter / setter are required to allow to configure from form and execute
-     * @return \Akeneo\Component\Batch\Step\StepExecutionAwareInterface
-     * @author Cristian Quiroz <cq@amp.co>
-     */
-    public function getPost()
-    {
-        return $this->post;
-    }
+        $response = $this->guzzle->request(
+            'POST',
+            $endpoint,
+            [
+                'body'      => $resource,
+                'headers'   => [
+                    'Content-Type'          => 'application/zip',
+                    'Authorization'         => $jobParameters->get('secretKey'),
+                ],
+            ]
+        );
 
-    /**
-     * @param \Akeneo\Component\Batch\Step\StepExecutionAwareInterface $post
-     * @author Cristian Quiroz <cq@amp.co>
-     */
-    public function setPost($post)
-    {
-        $this->post = $post;
-    }
+        if ($response->getStatusCode() !== 200) {
+            $stepExecution->addFailureException(new \Exception('Failed to POST csvv data: ' . $response->getBody()));
+        }
 
-    /**
-     * Step items which are configurable with the job edit form
-     * @return array
-     * @author Cristian Quiroz <cq@amp.co>
-     */
-    public function getConfigurableStepElements()
-    {
-        return [
-            'post' => $this->getPost(),
-        ];
+        $stepExecution->addSummaryInfo('response_code', $response->getStatusCode());
+        $stepExecution->addSummaryInfo('response_body', $response->getBody()->getContents());
     }
 }

@@ -1,22 +1,79 @@
 parameters:
     snowio_connector.step.post.class:  Snowio\Bundle\CsvConnectorBundle\Step\PostStep
-    snowio_connector.handler.post.class: Snowio\Bundle\CsvConnectorBundle\Handler\PostHandler
-    snowio_connector.step.archive.class: Snowio\Bundle\CsvConnectorBundle\Step\ArchiveStep
-    snowio_connector.handler.metadata.class: Snowio\Bundle\CsvConnectorBundle\Handler\MetadataHandler
-    snowio_connector.handler.archive.class: Snowio\Bundle\CsvConnectorBundle\Handler\ArchiveHandler
-    guzzlehttp.client: GuzzleHttp\Client
+    snowio_connector.step.archive.class:  Snowio\Bundle\CsvConnectorBundle\Step\ArchiveStep
+    snowio_connector.step.metadata.class:  Snowio\Bundle\CsvConnectorBundle\Step\MetadataStep
+    guzzlehttp.client.class: GuzzleHttp\Client
+    snowio_connector.step.archive.zip.class: ZipArchive
 
 services:
     guzzlehttp.client:
-        class: %guzzlehttp.client%
+        class: '%guzzlehttp.client.class%'
 
-    snowio_connector.handler.post:
-        class: %snowio_connector.handler.post.class%
+    snowio_connector.step.archive.zip:
+        class: '%snowio_connector.step.archive.zip.class%'
+
+    snowio_connector.step.archive:
+        class: '%snowio_connector.step.archive.class%'
         arguments:
-            - @guzzlehttp.client
+            - 'archive'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            - '@snowio_connector.step.archive.zip'
 
-    snowio_connector.handler.metadata:
-        class: %snowio_connector.handler.metadata.class%
+    snowio_connector.step.post:
+        class: '%snowio_connector.step.post.class%'
+        arguments:
+            - 'post'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            - '@guzzlehttp.client'
 
-    snowio_connector.handler.archive:
-        class: %snowio_connector.handler.archive.class%
+    snowio_connector.step.metadata:
+        class: '%snowio_connector.step.metadata.class%'
+        arguments:
+            - 'metadata'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+
+    # Overwrite service definition to set step name (arg 0) and writer
+    snowio_connector.step.csv_product.export:
+        class: '%pim_connector.step.item_step.class%'
+        parent: 'pim_connector.step.csv_product.export'
+        arguments:
+            index_0: 'product'
+            index_5: '@snowio_connector.writer.file.csv_product'
+
+    snowio_connector.step.csv_variant_group.export:
+        class: '%pim_connector.step.item_step.class%'
+        parent: 'pim_connector.step.csv_variant_group.export'
+        arguments:
+            index_0: 'variant_group'
+            index_5: '@snowio_connector.writer.file.csv_variant_group'
+
+    snowio_connector.step.csv_category.export:
+        class: '%pim_connector.step.item_step.class%'
+        parent: 'pim_connector.step.csv_category.export'
+        arguments:
+            index_0: 'category'
+            index_5: '@snowio_connector.writer.file.csv_category'
+
+    snowio_connector.step.csv_attribute.export:
+        class: '%pim_connector.step.item_step.class%'
+        parent: 'pim_connector.step.csv_attribute.export'
+        arguments:
+            index_0: 'attribute'
+            index_5: '@snowio_connector.writer.file.csv_attribute'
+
+    snowio_connector.step.csv_attribute_option.export:
+        class: '%pim_connector.step.item_step.class%'
+        parent: 'pim_connector.step.csv_attribute_option.export'
+        arguments:
+            index_0: 'attribute_option'
+            index_5: '@snowio_connector.writer.file.csv_attribute_option'
+
+    snowio_connector.step.csv_family.export:
+        class: '%pim_connector.step.item_step.class%'
+        parent: 'pim_connector.step.csv_family.export'
+        arguments:
+            index_0: 'family'
+            index_5: '@snowio_connector.writer.file.csv_family'

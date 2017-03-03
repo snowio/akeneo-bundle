@@ -1,0 +1,5 @@
+suites:
+    SnowioCsvConnectorBundle:
+        namespace: Snowio\Bundle\CsvConnectorBundle
+        psr4_prefix: Snowio\Bundle\CsvConnectorBundle
+        src_path: .

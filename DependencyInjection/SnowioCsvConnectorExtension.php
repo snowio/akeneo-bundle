@@ -13,7 +13,10 @@ class SnowioCsvConnectorExtension extends Extension
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('steps.yml');
-        $loader->load('processors.yml');
         $loader->load('writers.yml');
+        $loader->load('jobs.yml');
+        $loader->load('job_configurations.yml');
+        $loader->load('job_defaults.yml');
+        $loader->load('job_constraints.yml');
     }
 }
