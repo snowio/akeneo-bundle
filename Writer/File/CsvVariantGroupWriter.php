@@ -2,7 +2,7 @@
 
 namespace Snowio\Bundle\CsvConnectorBundle\Writer\File;
 
-use Pim\Bundle\BaseConnectorBundle\Writer\File\CsvVariantGroupWriter as BaseCsvVariantGroupWriter;
+use Pim\Component\Connector\Writer\File\CsvVariantGroupWriter as BaseCsvVariantGroupWriter;
 use Snowio\Bundle\CsvConnectorBundle\Writer\FileWriterOverriderTrait;
 
 class CsvVariantGroupWriter extends BaseCsvVariantGroupWriter

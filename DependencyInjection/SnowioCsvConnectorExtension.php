@@ -15,7 +15,7 @@ class SnowioCsvConnectorExtension extends Extension
         $loader->load('steps.yml');
         $loader->load('writers.yml');
         $loader->load('jobs.yml');
-        $loader->load('job_configurations.yml');
+        $loader->load('services.yml');
         $loader->load('job_defaults.yml');
         $loader->load('job_constraints.yml');
     }

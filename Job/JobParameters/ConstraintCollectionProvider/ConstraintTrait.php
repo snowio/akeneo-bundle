@@ -3,7 +3,7 @@
 namespace Snowio\Bundle\CsvConnectorBundle\Job\JobParameters\ConstraintCollectionProvider;
 
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Pim\Bundle\ImportExportBundle\Validator\Constraints\WritableDirectory;
+use Pim\Component\Catalog\Validator\Constraints\WritableDirectory;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Collection;
 

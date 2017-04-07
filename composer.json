@@ -5,6 +5,9 @@
         {
             "name": "Cristian Quiroz",
             "email": "cq@amp.co"
+        }, {
+            "name": "Nei Santos",
+            "email": "ns@amp.co"
         }
     ],
     "repositories": [
@@ -15,7 +18,7 @@
         }
     ],
     "require": {
-        "akeneo/pim-community-dev": "~1.6.8",
+        "akeneo/pim-community-dev": "1.7.*",
         "guzzlehttp/guzzle": "^6.1",
         "symfony/config": "^2.7.2",
         "symfony/dependency-injection": "^2.7.2",

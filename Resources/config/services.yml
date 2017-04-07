@@ -1,0 +1,9 @@
+services:
+    snowio_connector.provider.form.job_instance:
+        class: '%pim_enrich.provider.form.job_instance.class%'
+        arguments:
+            -
+                complete_export: pim-job-instance-csv-base-export
+                incomplete_export: pim-job-instance-csv-base-export
+        tags:
+            - { name: pim_enrich.provider.form, priority: 100 }
