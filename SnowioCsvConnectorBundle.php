@@ -29,7 +29,6 @@ class SnowioCsvConnectorBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         $container
-            ->addCompilerPass(new RegisterJobTemplatePass())
             ->addCompilerPass(new RegisterJobParametersFormsOptionsPass(new ReferenceFactory()))
             ->addCompilerPass(new RegisterJobNameVisibilityCheckerPass([
                 'snowio_connector.job_name.complete_export',
