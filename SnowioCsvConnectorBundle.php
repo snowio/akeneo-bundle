@@ -22,16 +22,4 @@ class SnowioCsvConnectorBundle extends Bundle
 {
     /** Increment the version number if exported data has BC break changes. */
     const VERSION = 1;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function build(ContainerBuilder $container)
-    {
-        $container
-            ->addCompilerPass(new RegisterJobParametersFormsOptionsPass(new ReferenceFactory()))
-            ->addCompilerPass(new RegisterJobNameVisibilityCheckerPass([
-                'snowio_connector.job_name.complete_export',
-            ]));
-    }
 }
