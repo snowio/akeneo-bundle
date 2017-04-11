@@ -1,5 +1,5 @@
 batch_jobs:
-    incomplete_export:
+    partial_export:
         label: "Incomplete export (categories, attributes, attribute options, and families)"
         category.label:  "Category Export Step"
         attribute.label: "Attribute Export Step"
@@ -8,7 +8,7 @@ batch_jobs:
         archive.label: "Archive Step"
         metadata.label: "Metadata Step"
         post.label: "Post Step"
-    complete_export:
+    full_export:
         label: "Complete export (products, variant groups, categories, attributes, attribute options, and families)"
         product.label: "Product Export Step"
         variant_group.label: "Variant Group Export Step"

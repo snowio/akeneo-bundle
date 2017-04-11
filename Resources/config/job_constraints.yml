@@ -4,17 +4,17 @@ parameters:
 
 services:
     # Validation constraints for our JobParameters
-    snowio_connector.job.job_parameters.constraint_collection_provider.complete_export:
+    snowio_connector.job.job_parameters.constraint_collection_provider.full_export:
           class: '%snowio_connector.job.job_parameters.constraint_collection_provider.product.class%'
           arguments:
               - '@pim_connector.job.job_parameters.constraint_collection_provider.simple_csv_export'
-              - ['complete_export']
+              - ['full_export']
           tags:
               - { name: akeneo_batch.job.job_parameters.constraint_collection_provider }
 
-    snowio_connector.job.job_parameters.constraint_collection_provider.incomplete_export:
+    snowio_connector.job.job_parameters.constraint_collection_provider.partial_export:
           class: '%snowio_connector.job.job_parameters.constraint_collection_provider.simple.class%'
           arguments:
-              - ['incomplete_export']
+              - ['partial_export']
           tags:
               - { name: akeneo_batch.job.job_parameters.constraint_collection_provider }

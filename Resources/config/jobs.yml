@@ -1,14 +1,13 @@
 parameters:
     snowio_connector.connector_name.csv: 'Snowio Connector'
-    snowio_connector.job_name.complete_export: 'complete_export'
-    snowio_connector.job_name.incomplete_export: 'incomplete_export'
+    snowio_connector.job_name.full_export: 'full_export'
+    snowio_connector.job_name.partial_export: 'partial_export'
 
 services:
-
-    snowio_connector.job.complete_export:
+    snowio_connector.job.full_export:
         class: '%pim_connector.job.simple_job.class%'
         arguments:
-            - '%snowio_connector.job_name.complete_export%'
+            - '%snowio_connector.job_name.full_export%'
             - '@event_dispatcher'
             - '@akeneo_batch.job_repository'
             -
@@ -24,10 +23,10 @@ services:
         tags:
             - { name: akeneo_batch.job, connector: '%snowio_connector.connector_name.csv%', type: '%pim_connector.job.export_type%' }
 
-    snowio_connector.job.incomplete_export:
+    snowio_connector.job.partial_export:
         class: '%pim_connector.job.simple_job.class%'
         arguments:
-            - '%snowio_connector.job_name.incomplete_export%'
+            - '%snowio_connector.job_name.partial_export%'
             - '@event_dispatcher'
             - '@akeneo_batch.job_repository'
             -
