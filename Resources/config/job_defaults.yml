@@ -4,18 +4,18 @@ parameters:
 
 services:
     snowio_connector.job.job_parameters.default_values_provider.complete_export:
-            class: '%snowio_connector.job.job_parameters.default_values_provider.product.class%'
-            arguments:
-                - '@pim_connector.job.job_parameters.default_values_provider.simple_csv_export'
-                - '@pim_catalog.repository.channel'
-                - '@pim_catalog.repository.locale'
-                - ['complete_export']
-            tags:
-                - { name: akeneo_batch.job.job_parameters.default_values_provider }
+        class: '%snowio_connector.job.job_parameters.default_values_provider.product.class%'
+        arguments:
+            - '@pim_connector.job.job_parameters.default_values_provider.simple_csv_export'
+            - '@pim_catalog.repository.channel'
+            - '@pim_catalog.repository.locale'
+            - ['complete_export']
+        tags:
+            - { name: akeneo_batch.job.job_parameters.default_values_provider }
 
     snowio_connector.job.job_parameters.default_values_provider.incomplete_export:
-            class: '%snowio_connector.job.job_parameters.default_values_provider.simple.class%'
-            arguments:
-                - ['incomplete_export']
-            tags:
-                - { name: akeneo_batch.job.job_parameters.default_values_provider }
+        class: '%snowio_connector.job.job_parameters.default_values_provider.simple.class%'
+        arguments:
+            - ['incomplete_export']
+        tags:
+            - { name: akeneo_batch.job.job_parameters.default_values_provider }

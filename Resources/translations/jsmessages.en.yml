@@ -1,8 +1,22 @@
 job_execution:
-    summary:
-        zip_location: Zip File Location
-        url: Send Zip to Endpoint
-        metadata_location: Metadata file
-        response_code: Response Code
-        response_body: Response Body
+  summary:
+    zip_location: Zip File Location
+    url: Send Zip to Endpoint
+    metadata_location: Metadata file
+    response_code: Response Code
+    response_body: Response Body
+
+snowio_connector.form.job_instance.tab.properties:
+  endpoint:
+    title: Endpoint Url
+    help: The URL where to make the request after file generation.
+  application_id:
+    title: Application Id
+    help: The Application ID provided by Snow.io
+  secret_key:
+    title: Secret Key
+    help: The Secret Key provided by Snow.io
+  export_dir:
+    title: Export Directory
+    help: The directory to store CSV and ZIP files.
 

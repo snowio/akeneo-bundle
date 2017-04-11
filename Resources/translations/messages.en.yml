@@ -27,18 +27,3 @@ job_execution:
         response_body: Body
         zip_location: Zip file
         metadata_location: Metadata file
-
-snowio_connector:
-    export.csv:
-        endpoint:
-            label: Endpoint Url
-            help: The URL where to make the request after file generation.
-        applicationId:
-            label: Application Id
-            help: The Application ID provided by Snow.io
-        secretKey:
-            label: Secret Key
-            help: The Secret Key provided by Snow.io
-        exportDir:
-            label: Export Directory
-            help: The directory to store CSV and ZIP files.
