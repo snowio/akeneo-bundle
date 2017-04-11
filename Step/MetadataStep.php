@@ -43,7 +43,7 @@ class MetadataStep extends AbstractStep
         $content = [
             'bundleVersion'     => SnowioCsvConnectorBundle::VERSION,
             'jobCode'           => $stepExecution->getJobExecution()->getJobInstance()->getJobName(),
-            'date'              => gmdate('Y-m-d_H:i:s'),
+            'date'              => gmdate('Y-m-d H:i:s'),
             'delimiter'         => $jobParameters->get('delimiter'),
             'enclosure'         => $jobParameters->get('enclosure'),
             'withHeader'        => $jobParameters->get('withHeader')
