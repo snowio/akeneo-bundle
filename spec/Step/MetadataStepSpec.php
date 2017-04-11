@@ -41,7 +41,8 @@ class MetadataStepSpec extends ObjectBehavior
         JobParameters $jobParameters,
         BatchStatus $status,
         ExitStatus $exitStatus,
-        JobInstance $jobInstance
+        JobInstance $jobInstance,
+        JobExecution $jobExecution
     ) {
         $jobParameters->get('exportDir')->willReturn($this->directory);
         $jobParameters->get('delimiter')->willReturn('abc');
@@ -57,8 +58,10 @@ class MetadataStepSpec extends ObjectBehavior
         $jobParameters->has('with_media')->willReturn(true);
 
         $execution->getJobParameters()->willReturn($jobParameters);
-        $jobInstance->getLabel()->willReturn('Jobtest');
-        $execution->getJobExecution()->willReturn($jobInstance);
+
+        $jobInstance->getJobName()->willReturn('Jobtest');
+        $jobExecution->getJobInstance()->willReturn($jobInstance);
+        $execution->getJobExecution()->willReturn($jobExecution);
 
         # before
         $execution->getStatus()->willReturn($status);
