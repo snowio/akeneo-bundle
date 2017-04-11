@@ -18,5 +18,5 @@ use Pim\Bundle\EnrichBundle\DependencyInjection\Reference\ReferenceFactory;
 class SnowioCsvConnectorBundle extends Bundle
 {
     /** Increment the version number if exported data has BC break changes. */
-    const VERSION = 1;
+    const VERSION = 2;
 }
