@@ -72,7 +72,7 @@ class PostStep extends AbstractStep
         );
 
         if ($response->getStatusCode() !== 200) {
-            $stepExecution->addFailureException(new \Exception('Failed to POST csvv data: ' . $response->getBody()));
+            $stepExecution->addFailureException(new \Exception('Failed to POST CSV file: ' . $response->getBody()));
         }
 
         $stepExecution->addSummaryInfo('response_code', $response->getStatusCode());

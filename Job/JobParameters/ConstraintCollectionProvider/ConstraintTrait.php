@@ -3,6 +3,7 @@
 namespace Snowio\Bundle\CsvConnectorBundle\Job\JobParameters\ConstraintCollectionProvider;
 
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Uuid;
 use Pim\Component\Catalog\Validator\Constraints\WritableDirectory;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Collection;
@@ -26,11 +27,11 @@ trait ConstraintTrait
             'endpoint'      => [
                 new NotBlank(['groups' => ['Default', 'FileConfiguration']]),
                 new Regex([
-                    'pattern' => '/^http/',
-                    'message' => 'The endpoint should be an http url'
+                    'pattern' => '/^http(.*)\/$/',
+                    'message' => 'The endpoint should be an http url ending with slash. (http://localhost/)'
                 ])
             ],
-            'applicationId' => new NotBlank(['groups' => ['Default', 'FileConfiguration']]),
+            'applicationId' => new Uuid(['groups' => ['Default', 'FileConfiguration']]),
             'secretKey'     => new NotBlank(['groups' => ['Default', 'FileConfiguration']]),
             'exportDir'     => [
                 new NotBlank(['groups' => ['Default', 'Execution', 'FileConfiguration']]),
