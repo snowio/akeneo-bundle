@@ -31,7 +31,10 @@ trait ConstraintTrait
                     'message' => 'The endpoint should be an http url ending with slash. (http://localhost/)'
                 ])
             ],
-            'applicationId' => new Uuid(['groups' => ['Default', 'FileConfiguration']]),
+            'applicationId' => [
+                new Uuid(['groups' => ['Default', 'FileConfiguration']]),
+                new NotBlank(['groups' => ['Default', 'FileConfiguration']])
+            ],
             'secretKey'     => new NotBlank(['groups' => ['Default', 'FileConfiguration']]),
             'exportDir'     => [
                 new NotBlank(['groups' => ['Default', 'Execution', 'FileConfiguration']]),
