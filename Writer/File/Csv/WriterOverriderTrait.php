@@ -25,4 +25,28 @@ trait WriterOverriderTrait
 
         return $filePath;
     }
+
+    /**
+     * Override Export medias to avoid deleting the files path since it is shared.
+     *
+     * More info see https://github.com/AmpersandHQ/bes-akeneo/pull/46
+     */
+    protected function exportMedias()
+    {
+        $outputDirectory = dirname($this->getPath());
+        $workingDirectory = $this->stepExecution->getJobExecution()->getExecutionContext()
+            ->get(JobInterface::WORKING_DIRECTORY_PARAMETER);
+
+        $outputFilesDirectory = $outputDirectory . DIRECTORY_SEPARATOR . 'files';
+        $workingFilesDirectory = $workingDirectory . 'files';
+
+        /* Avoid removing files folder
+        if ($this->localFs->exists($outputFilesDirectory)) {
+            $this->localFs->remove($outputFilesDirectory);
+        }*/
+
+        if ($this->localFs->exists($workingFilesDirectory)) {
+            $this->localFs->mirror($workingFilesDirectory, $outputFilesDirectory);
+        }
+    }
 }
