@@ -21,6 +21,7 @@ batch_jobs:
         metadata.label: "Metadata Step"
         post.label: "Post Step"
         media_export.label: "Media Export Step"
+        check_thresholds.label: "Check Thresholds Step"
 
 job_execution:
     summary:
@@ -31,3 +32,4 @@ job_execution:
         metadata_location: Metadata file
         export_location: Export location
         log_file: Log file
+        minimum_products_threshold: Minimum products threshold
