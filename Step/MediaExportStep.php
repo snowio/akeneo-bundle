@@ -57,19 +57,25 @@ class MediaExportStep extends AbstractStep
      */
     protected function doExecute(StepExecution $stepExecution)
     {
-        $currentExportDir = rtrim($stepExecution->getJobParameters()->get('exportDir'), '/');
-        $newExportDir = rtrim($this->exportLocation, '/');
+        try {
+            $currentExportDir = rtrim($stepExecution->getJobParameters()->get('exportDir'), '/');
+            $newExportDir = rtrim($this->exportLocation, '/');
 
-        $stepExecution->addSummaryInfo('log_file', $this->logFile);
-        $stepExecution->addSummaryInfo('export_location', $newExportDir);
+            $stepExecution->addSummaryInfo('log_file', $this->logFile);
+            $stepExecution->addSummaryInfo('export_location', $newExportDir);
 
-        $output = $this->syncMedia($currentExportDir, $newExportDir);
-        $this->writeLog($this->getModifiedOutputForLog($output, $stepExecution));
+            $output = $this->syncMedia($currentExportDir, $newExportDir);
+            $this->writeLog($this->getModifiedOutputForLog($output, $stepExecution));
 
-        $stepExecution->addSummaryInfo('read', $output[1]);
-        $stepExecution->addSummaryInfo('write', $output[2]);
+            $stepExecution->addSummaryInfo('read', $output[1]);
+            $stepExecution->addSummaryInfo('write', $output[2]);
 
-        $this->forceReconnect();
+            $this->forceReconnect();
+
+        } catch(\Exception $e) {
+            $this->writeLog(['Error - something went wrong during media export.', $e->getMessage()]);
+            throw $e;
+        }
     }
 
     /**
