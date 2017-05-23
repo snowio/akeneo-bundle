@@ -4,6 +4,7 @@ parameters:
     snowio_connector.step.metadata.class:  Snowio\Bundle\CsvConnectorBundle\Step\MetadataStep
     guzzlehttp.client.class: GuzzleHttp\Client
     snowio_connector.step.archive.zip.class: ZipArchive
+    snowio_connector.step.media_export.class: Snowio\Bundle\CsvConnectorBundle\Step\MediaExportStep
 
 services:
     guzzlehttp.client:
@@ -19,6 +20,16 @@ services:
             - '@event_dispatcher'
             - '@akeneo_batch.job_repository'
             - '@snowio_connector.step.archive.zip'
+
+    snowio_connector.step.media_export:
+        class: '%snowio_connector.step.media_export.class%'
+        arguments:
+            - 'media_export'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            - '@doctrine.orm.entity_manager'
+            - '%media_export_user%@%media_export_host%:%media_export_directory%'
+            - '%kernel.root_dir%/logs/%media_export_log_filename%'
 
     snowio_connector.step.post:
         class: '%snowio_connector.step.post.class%'
