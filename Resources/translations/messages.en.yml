@@ -8,6 +8,7 @@ batch_jobs:
         archive.label: "Archive Step"
         metadata.label: "Metadata Step"
         post.label: "Post Step"
+        media_export.label: "Media Export Step"
     full_export:
         label: "Full Export (products, variant groups, categories, attributes, attribute options, and families)"
         product.label: "Product Export Step"
@@ -19,6 +20,7 @@ batch_jobs:
         archive.label: "Archive Step"
         metadata.label: "Metadata Step"
         post.label: "Post Step"
+        media_export.label: "Media Export Step"
 
 job_execution:
     summary:
@@ -27,3 +29,5 @@ job_execution:
         response_body: Body
         zip_location: Zip file
         metadata_location: Metadata file
+        export_location: Export location
+        log_file: Log file
