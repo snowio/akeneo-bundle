@@ -5,6 +5,7 @@ parameters:
     guzzlehttp.client.class: GuzzleHttp\Client
     snowio_connector.step.archive.zip.class: ZipArchive
     snowio_connector.step.media_export.class: Snowio\Bundle\CsvConnectorBundle\Step\MediaExportStep
+    snowio_connector.step.check_thresholds.class: Snowio\Bundle\CsvConnectorBundle\Step\CheckThresholdsStep
 
 services:
     guzzlehttp.client:
@@ -45,6 +46,15 @@ services:
             - 'metadata'
             - '@event_dispatcher'
             - '@akeneo_batch.job_repository'
+
+    snowio_connector.step.check_thresholds:
+            class: '%snowio_connector.step.check_thresholds.class%'
+            arguments:
+                - 'check_thresholds'
+                - '@event_dispatcher'
+                - '@akeneo_batch.job_repository'
+                - '@pim_connector.reader.database.product'
+                - '%minimum_products_export%'
 
     # Overwrite service definition to set step name (arg 0) and writer
     snowio_connector.step.csv_product.export:
