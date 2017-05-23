@@ -60,13 +60,16 @@ class MediaExportStep extends AbstractStep
         $currentExportDir = rtrim($stepExecution->getJobParameters()->get('exportDir'), '/');
         $newExportDir = rtrim($this->exportLocation, '/');
 
+        $stepExecution->addSummaryInfo('log_file', $this->logFile);
+        $stepExecution->addSummaryInfo('export_location', $newExportDir);
+
         $output = $this->syncMedia($currentExportDir, $newExportDir);
         $this->writeLog($this->getModifiedOutputForLog($output, $stepExecution));
 
-        $this->forceReconnect();
+        $stepExecution->addSummaryInfo('read', $output[1]);
+        $stepExecution->addSummaryInfo('write', $output[2]);
 
-        $stepExecution->addSummaryInfo('log_file', $this->logFile);
-        $stepExecution->addSummaryInfo('export_location', $newExportDir);
+        $this->forceReconnect();
     }
 
     /**
