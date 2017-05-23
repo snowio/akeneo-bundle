@@ -100,7 +100,7 @@ class MediaExportStep extends AbstractStep
         $handle = fopen($this->logFile, 'a+');
         if ($handle === false) {
             throw new FileNotFoundException(
-                sprintf('Error - log file could not be opened during media export.', $this->logFile)
+                sprintf('Error - log file (%s) could not be opened during media export.', $this->logFile)
             );
         }
 
