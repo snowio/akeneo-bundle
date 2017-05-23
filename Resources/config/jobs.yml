@@ -11,6 +11,7 @@ services:
             - '@event_dispatcher'
             - '@akeneo_batch.job_repository'
             -
+                - '@snowio_connector.step.check_thresholds'
                 - '@snowio_connector.step.csv_product.export'
                 - '@snowio_connector.step.csv_variant_group.export'
                 - '@snowio_connector.step.csv_category.export'
