@@ -47,14 +47,21 @@ services:
             - '@event_dispatcher'
             - '@akeneo_batch.job_repository'
 
-    snowio_connector.step.check_thresholds:
+    snowio_connector.step.check_threshold.products:
             class: '%snowio_connector.step.check_thresholds.class%'
             arguments:
                 - 'check_thresholds'
                 - '@event_dispatcher'
                 - '@akeneo_batch.job_repository'
-                - '@pim_connector.reader.database.product'
                 - '%minimum_products_export%'
+
+    snowio_connector.step.check_threshold.attributes:
+              class: '%snowio_connector.step.check_thresholds.class%'
+              arguments:
+                  - 'check_thresholds'
+                  - '@event_dispatcher'
+                  - '@akeneo_batch.job_repository'
+                  - '%minimum_attributes_export%'
 
     # Overwrite service definition to set step name (arg 0) and writer
     snowio_connector.step.csv_product.export:

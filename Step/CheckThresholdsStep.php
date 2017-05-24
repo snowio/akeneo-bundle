@@ -5,35 +5,32 @@ namespace Snowio\Bundle\CsvConnectorBundle\Step;
 use Akeneo\Component\Batch\Job\JobRepositoryInterface;
 use Akeneo\Component\Batch\Model\StepExecution;
 use Akeneo\Component\Batch\Step\AbstractStep;
-use Pim\Component\Catalog\Model\AbstractProduct;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * Use this class to check export threshold has been met in previous step
+ * Create a service, inject the relevant threshold, and configure the job so this comes after the step you want to check
+ */
 class CheckThresholdsStep extends AbstractStep
 {
     /** @var int */
-    private $minimumProductsThreshold;
-
-    /** @var \Pim\Component\Connector\Reader\Database\ProductReader  */
-    private $productReader;
+    private $minimumExportThreshold;
 
     /**
      * CheckThresholdsStep constructor.
      * @param string $name
      * @param EventDispatcherInterface $eventDispatcher
      * @param JobRepositoryInterface $jobRepository
-     * @param \Pim\Component\Connector\Reader\Database\ProductReader $productReader
-     * @param $minimumProductsThreshold
+     * @param $minimumExportThreshold
      */
     public function __construct(
         $name,
         EventDispatcherInterface $eventDispatcher,
         JobRepositoryInterface $jobRepository,
-        \Pim\Component\Connector\Reader\Database\ProductReader $productReader,
-        $minimumProductsThreshold
+        $minimumExportThreshold
     ) {
         parent::__construct($name, $eventDispatcher, $jobRepository);
-        $this->minimumProductsThreshold = (int)$minimumProductsThreshold;
-        $this->productReader = $productReader;
+        $this->minimumExportThreshold = (int)$minimumExportThreshold;
     }
 
     /**
@@ -48,13 +45,19 @@ class CheckThresholdsStep extends AbstractStep
      */
     protected function doExecute(StepExecution $stepExecution)
     {
-        $stepExecution->addSummaryInfo('minimum_products_threshold', $this->minimumProductsThreshold);
+        $previousStepExecution = $this->getPreviousStepExecution($stepExecution);
 
-        if ($this->minimumProductsThreshold > 0 && !$this->isProductCountAboveMinimumThreshold($stepExecution)) {
+        $stepExecution->addSummaryInfo(
+            'minimum_threshold',
+            sprintf('%s (%s)', $this->minimumExportThreshold, $previousStepExecution->getStepName())
+        );
+
+        if ($this->minimumExportThreshold > 0 && !$this->doesExportCountMeetThreshold($previousStepExecution)) {
             throw new \Exception(
                 sprintf(
-                    'Error - attempted to export fewer products than the minimum threshold (%s).',
-                    $this->minimumProductsThreshold
+                    'Error - attempted to export less than the minimum threshold (step: %s/threshold: %s).',
+                    $previousStepExecution->getStepName(),
+                    $this->minimumExportThreshold
                 )
             );
         }
@@ -65,18 +68,28 @@ class CheckThresholdsStep extends AbstractStep
      * @return bool
      * @author James Pollard <jp@amp.co>
      */
-    private function isProductCountAboveMinimumThreshold(StepExecution $stepExecution)
+    private function doesExportCountMeetThreshold(StepExecution $stepExecution)
     {
-        $this->productReader->setStepExecution($stepExecution);
-        $this->productReader->initialize();
+        return $stepExecution->getSummaryInfo('read') >= $this->minimumExportThreshold;
+    }
 
-        for ($i = 0; $i < $this->minimumProductsThreshold; $i++) {
-            $product = $this->productReader->read();
-            if (!($product instanceof AbstractProduct)) {
-                return false;
-            }
+    /**
+     * @param StepExecution $stepExecution
+     * @return StepExecution
+     * @throws \Exception
+     * @author James Pollard <jp@amp.co>
+     */
+    private function getPreviousStepExecution(StepExecution $stepExecution)
+    {
+        $stepExecutions = $stepExecution->getJobExecution()->getStepExecutions()->toArray();
+        // set array pointer to last element i.e. the current execution
+        end($stepExecutions);
+        $previousStepExecution = prev($stepExecutions);
+
+        if (!($previousStepExecution instanceof StepExecution)) {
+            throw new \Exception('Error during threshold check step - previous execution step was not found.');
         }
 
-        return true;
+        return $previousStepExecution;
     }
 }
