@@ -11,11 +11,12 @@ services:
             - '@event_dispatcher'
             - '@akeneo_batch.job_repository'
             -
-                - '@snowio_connector.step.check_thresholds'
                 - '@snowio_connector.step.csv_product.export'
+                - '@snowio_connector.step.check_threshold.products'
                 - '@snowio_connector.step.csv_variant_group.export'
                 - '@snowio_connector.step.csv_category.export'
                 - '@snowio_connector.step.csv_attribute.export'
+                - '@snowio_connector.step.check_threshold.attributes'
                 - '@snowio_connector.step.csv_attribute_option.export'
                 - '@snowio_connector.step.csv_family.export'
                 - '@snowio_connector.step.metadata'
