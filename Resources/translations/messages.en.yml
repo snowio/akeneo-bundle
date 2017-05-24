@@ -32,4 +32,4 @@ job_execution:
         metadata_location: Metadata file
         export_location: Export location
         log_file: Log file
-        minimum_products_threshold: Minimum products threshold
+        minimum_threshold: Minimum threshold
