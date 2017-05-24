@@ -5,6 +5,7 @@ namespace Snowio\Bundle\CsvConnectorBundle\Step;
 use Akeneo\Component\Batch\Job\JobRepositoryInterface;
 use Akeneo\Component\Batch\Model\StepExecution;
 use Akeneo\Component\Batch\Step\AbstractStep;
+use Pim\Component\Catalog\Model\AbstractProduct;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CheckThresholdsStep extends AbstractStep
@@ -66,36 +67,16 @@ class CheckThresholdsStep extends AbstractStep
      */
     private function isProductCountAboveMinimumThreshold(StepExecution $stepExecution)
     {
-        foreach ($this->getProducts($stepExecution) as $index => $product) {
-            if ($index >= $this->minimumProductsThreshold - 1) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param StepExecution $stepExecution
-     * @return \Generator
-     * @author James Pollard <jp@amp.co>
-     */
-    private function getProducts(StepExecution $stepExecution)
-    {
         $this->productReader->setStepExecution($stepExecution);
         $this->productReader->initialize();
 
-        $continueExecution = true;
-        while($continueExecution) {
-
+        for ($i = 0; $i < $this->minimumProductsThreshold; $i++) {
             $product = $this->productReader->read();
-
-            if (!($product instanceof \Pim\Component\Catalog\Model\AbstractProduct)) {
-                $continueExecution = false;
-                continue;
+            if (!($product instanceof AbstractProduct)) {
+                return false;
             }
-
-            yield $product;
         }
+
+        return true;
     }
 }
