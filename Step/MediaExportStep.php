@@ -103,7 +103,7 @@ class MediaExportStep extends AbstractStep
     protected function writeLog(array $content)
     {
         if (!is_dir(dirname($this->logFile))) {
-            mkdir(dirname($this->logFile), 0777, true);
+            mkdir(dirname($this->logFile), 0644, true);
         }
 
         $handle = fopen($this->logFile, 'a+');
