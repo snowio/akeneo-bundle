@@ -6,18 +6,18 @@ use Akeneo\Component\Batch\Job\JobRepositoryInterface;
 use Akeneo\Component\Batch\Model\StepExecution;
 use Akeneo\Component\Batch\Step\AbstractStep;
 use Akeneo\Component\FileStorage\Exception\FileTransferException;
-use Doctrine\DBAL\DBALException;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
+/**
+ * This class rsyncs media files to a configurable location and logs some info a separate log file
+ * Forcing reconnect to MySQL was looked into as part of this, which is not necessary:
+ * @see \Akeneo\Bundle\BatchBundle\Job\DoctrineJobRepository::updateStepExecution
+ */
 class MediaExportStep extends AbstractStep
 {
     /** @var string */
     protected $exportLocation;
-
-    /** @var \Doctrine\DBAL\Connection */
-    private $connection;
 
     /** @var string */
     private $logFile;
@@ -27,7 +27,6 @@ class MediaExportStep extends AbstractStep
      * @param string $name
      * @param EventDispatcherInterface $eventDispatcher
      * @param JobRepositoryInterface $jobRepository
-     * @param EntityManager $entityManager
      * @param $exportLocation
      * @param $logFile
      */
@@ -35,12 +34,10 @@ class MediaExportStep extends AbstractStep
         $name,
         EventDispatcherInterface $eventDispatcher,
         JobRepositoryInterface $jobRepository,
-        EntityManager $entityManager,
         $exportLocation,
         $logFile
     ) {
         parent::__construct($name, $eventDispatcher, $jobRepository);
-        $this->connection = $entityManager->getConnection();
         $this->exportLocation = $exportLocation;
         $this->logFile = $logFile;
     }
@@ -69,9 +66,6 @@ class MediaExportStep extends AbstractStep
 
             $stepExecution->addSummaryInfo('read', $output[1]);
             $stepExecution->addSummaryInfo('write', $output[2]);
-
-            $this->forceReconnect();
-
         } catch(\Exception $e) {
             $this->writeLog(['Error - something went wrong during media export.', $e->getMessage()]);
             throw $e;
@@ -137,17 +131,5 @@ class MediaExportStep extends AbstractStep
         );
 
         return $output;
-    }
-
-    /**
-     * @throws DBALException
-     * @author James Pollard <jp@amp.co>
-     */
-    private function forceReconnect()
-    {
-        $this->connection->connect();
-        if (!$this->connection->isConnected()) {
-            throw new DBALException('Error - MySQL connection lost during media export.');
-        }
     }
 }

@@ -28,7 +28,6 @@ services:
             - 'media_export'
             - '@event_dispatcher'
             - '@akeneo_batch.job_repository'
-            - '@doctrine.orm.entity_manager'
             - '%media_export_user%@%media_export_host%:%media_export_directory%'
             - '%kernel.root_dir%/logs/%media_export_log_filename%'
 
