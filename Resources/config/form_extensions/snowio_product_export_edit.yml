@@ -288,7 +288,7 @@ extensions:
         parent: snowio-csv-product-export-edit
 
     snowio-csv-product-export-edit-content-data-add-filter:
-        module: pim/job/product/edit/content/data/add-filter
+        module: pim/job/product/edit/content/data/add-select/attribute
         parent: snowio-csv-product-export-edit-content-data
         targetZone: headings
         position: 90
