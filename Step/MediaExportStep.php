@@ -81,7 +81,7 @@ class MediaExportStep extends AbstractStep
      */
     protected function syncMedia($currentExportDir, $newExportDir)
     {
-        exec("rsync -ah --stats $currentExportDir/ $newExportDir/", $output, $status);
+        exec("rsync -avhK --stats $currentExportDir/ $newExportDir/", $output, $status);
 
         if ($status !== 0) {
             throw new FileTransferException('Error - rsync failure during media export.' . implode(" : ", $output));
