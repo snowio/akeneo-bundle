@@ -81,10 +81,14 @@ class MediaExportStep extends AbstractStep
      */
     protected function syncMedia($currentExportDir, $newExportDir)
     {
-        exec("rsync -ah --stats $currentExportDir/ $newExportDir/", $output, $status);
+        /**
+         * append files to the current export dir so that we do not unnecessarily
+         * copy over the export csv files
+         */
+        exec("rsync -avhK --stats $currentExportDir/files/ $newExportDir/", $output, $status);
 
         if ($status !== 0) {
-            throw new FileTransferException('Error - rsync failure during media export.');
+            throw new FileTransferException('Error - rsync failure during media export.' . implode(" : ", $output));
         }
 
         return $output;
