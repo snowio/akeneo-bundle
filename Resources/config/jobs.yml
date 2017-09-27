@@ -12,13 +12,16 @@ services:
             - '@akeneo_batch.job_repository'
             -
                 - '@snowio_connector.step.csv_product.export'
+                - '@snowio_connector.step.check_threshold.products'
                 - '@snowio_connector.step.csv_variant_group.export'
                 - '@snowio_connector.step.csv_category.export'
                 - '@snowio_connector.step.csv_attribute.export'
+                - '@snowio_connector.step.check_threshold.attributes'
                 - '@snowio_connector.step.csv_attribute_option.export'
                 - '@snowio_connector.step.csv_family.export'
                 - '@snowio_connector.step.metadata'
                 - '@snowio_connector.step.archive'
+                - '@snowio_connector.step.media_export'
                 - '@snowio_connector.step.post'
         tags:
             - { name: akeneo_batch.job, connector: '%snowio_connector.connector_name.csv%', type: '%pim_connector.job.export_type%' }
