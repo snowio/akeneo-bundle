@@ -1,19 +1,19 @@
 <?php
 
-namespace Snowio\Bundle\MediaExport;
+namespace Snowio\Bundle\CsvConnectorBundle\MediaExport;
 
 class ExportLocation
 {
     /** @var  string */
     private $directory;
 
-    /** @var string|null */
+    /** @var string|false */
     private $host;
 
-    /** @var string|null */
+    /** @var string|false */
     private $user;
 
-    public function __construct($directory, $host = null, $user = null)
+    public function __construct($directory, $host = false, $user = false)
     {
         $this->directory = $directory;
         $this->host = $host;
