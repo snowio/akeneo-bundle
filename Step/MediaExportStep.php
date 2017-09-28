@@ -6,6 +6,7 @@ use Akeneo\Component\Batch\Job\JobRepositoryInterface;
 use Akeneo\Component\Batch\Model\StepExecution;
 use Akeneo\Component\Batch\Step\AbstractStep;
 use Akeneo\Component\FileStorage\Exception\FileTransferException;
+use Snowio\Bundle\CsvConnectorBundle\MediaExport\ExportLocation;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
@@ -16,7 +17,7 @@ use Symfony\Component\Filesystem\Exception\FileNotFoundException;
  */
 class MediaExportStep extends AbstractStep
 {
-    /** @var string */
+    /** @var ExportLocation */
     protected $exportLocation;
 
     /** @var string */
@@ -34,7 +35,7 @@ class MediaExportStep extends AbstractStep
         $name,
         EventDispatcherInterface $eventDispatcher,
         JobRepositoryInterface $jobRepository,
-        $exportLocation,
+        ExportLocation $exportLocation,
         $logFile
     ) {
         parent::__construct($name, $eventDispatcher, $jobRepository);
@@ -56,7 +57,7 @@ class MediaExportStep extends AbstractStep
     {
         try {
             $currentExportDir = rtrim($stepExecution->getJobParameters()->get('exportDir'), '/');
-            $newExportDir = rtrim($this->exportLocation, '/');
+            $newExportDir = rtrim($this->exportLocation->toString(), '/');
 
             $stepExecution->addSummaryInfo('log_file', $this->logFile);
             $stepExecution->addSummaryInfo('export_location', $newExportDir);

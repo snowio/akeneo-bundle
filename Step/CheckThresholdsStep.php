@@ -27,7 +27,7 @@ class CheckThresholdsStep extends AbstractStep
         $name,
         EventDispatcherInterface $eventDispatcher,
         JobRepositoryInterface $jobRepository,
-        $minimumExportThreshold
+        $minimumExportThreshold = 0
     ) {
         parent::__construct($name, $eventDispatcher, $jobRepository);
         $this->minimumExportThreshold = (int)$minimumExportThreshold;
