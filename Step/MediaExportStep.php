@@ -6,7 +6,7 @@ use Akeneo\Component\Batch\Job\JobRepositoryInterface;
 use Akeneo\Component\Batch\Model\StepExecution;
 use Akeneo\Component\Batch\Step\AbstractStep;
 use Akeneo\Component\FileStorage\Exception\FileTransferException;
-use Snowio\Bundle\MediaExport\ExportLocation;
+use Snowio\Bundle\CsvConnectorBundle\MediaExport\ExportLocation;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
@@ -17,7 +17,7 @@ use Symfony\Component\Filesystem\Exception\FileNotFoundException;
  */
 class MediaExportStep extends AbstractStep
 {
-    /** @var string */
+    /** @var ExportLocation */
     protected $exportLocation;
 
     /** @var string */
