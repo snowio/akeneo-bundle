@@ -6,6 +6,7 @@ parameters:
     snowio_connector.step.archive.zip.class: ZipArchive
     snowio_connector.step.media_export.class: Snowio\Bundle\CsvConnectorBundle\Step\MediaExportStep
     snowio_connector.step.check_thresholds.class: Snowio\Bundle\CsvConnectorBundle\Step\CheckThresholdsStep
+    snowio_connector.media_export.export_location.class: Snowio\Bundle\CsvConnectorBundle\MediaExport\ExportLocation
 
 services:
     guzzlehttp.client:
@@ -22,7 +23,7 @@ services:
             - '@akeneo_batch.job_repository'
             - '@snowio_connector.step.archive.zip'
 
-    snowio_connecor.media_export.export_location:
+    snowio_connector.media_export.export_location:
         class: '%snowio_connector.media_export.export_location.class%'
         arguments:
             - '%media_export_directory%'
