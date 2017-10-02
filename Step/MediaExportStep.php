@@ -3,10 +3,12 @@
 namespace Snowio\Bundle\CsvConnectorBundle\Step;
 
 use Akeneo\Component\Batch\Job\JobRepositoryInterface;
+use Akeneo\Component\Batch\Model\JobExecution;
 use Akeneo\Component\Batch\Model\StepExecution;
 use Akeneo\Component\Batch\Step\AbstractStep;
 use Akeneo\Component\FileStorage\Exception\FileTransferException;
 use Snowio\Bundle\CsvConnectorBundle\MediaExport\ExportLocation;
+use Snowio\Bundle\CsvConnectorBundle\MediaExport\Logger;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
@@ -20,27 +22,27 @@ class MediaExportStep extends AbstractStep
     /** @var ExportLocation */
     protected $exportLocation;
 
-    /** @var string */
-    private $logFile;
+    /** @var Logger */
+    private $logger;
 
     /**
      * MediaExportStep constructor.
      * @param string $name
      * @param EventDispatcherInterface $eventDispatcher
      * @param JobRepositoryInterface $jobRepository
-     * @param $exportLocation
-     * @param $logFile
+     * @param ExportLocation $exportLocation
+     * @param Logger $logger
      */
     public function __construct(
         $name,
         EventDispatcherInterface $eventDispatcher,
         JobRepositoryInterface $jobRepository,
         ExportLocation $exportLocation,
-        $logFile
+        Logger $logger
     ) {
         parent::__construct($name, $eventDispatcher, $jobRepository);
         $this->exportLocation = $exportLocation;
-        $this->logFile = $logFile;
+        $this->logger = $logger;
     }
 
     /**
@@ -59,16 +61,27 @@ class MediaExportStep extends AbstractStep
             $currentExportDir = rtrim($stepExecution->getJobParameters()->get('exportDir'), '/');
             $newExportDir = rtrim($this->exportLocation->toString(), '/');
 
-            $stepExecution->addSummaryInfo('log_file', $this->logFile);
             $stepExecution->addSummaryInfo('export_location', $newExportDir);
 
+            $stepExecution->addSummaryInfo(
+                'log_file',
+                $this->logger->getLogFileNameForJob($stepExecution->getJobExecution()->getId())
+            );
+
             $output = $this->syncMedia($currentExportDir, $newExportDir);
-            $this->writeLog($this->getModifiedOutputForLog($output, $stepExecution));
+
+            $this->writeLog(
+                $this->getModifiedOutputForLog($output, $stepExecution),
+                $stepExecution->getJobExecution()
+            );
 
             $stepExecution->addSummaryInfo('read', $output[1]);
             $stepExecution->addSummaryInfo('write', $output[2]);
         } catch(\Exception $e) {
-            $this->writeLog(['Error - something went wrong during media export.', $e->getMessage()]);
+            $this->writeLog(
+                ['Error - something went wrong during media export.', $e->getMessage()],
+                $stepExecution->getJobExecution()
+            );
             throw $e;
         }
     }
@@ -99,21 +112,9 @@ class MediaExportStep extends AbstractStep
      * @param array $content
      * @author James Pollard <jp@amp.co>
      */
-    protected function writeLog(array $content)
+    protected function writeLog(array $content, JobExecution $job)
     {
-        if (!is_dir(dirname($this->logFile))) {
-            mkdir(dirname($this->logFile), 0644, true);
-        }
-
-        $handle = fopen($this->logFile, 'a+');
-        if ($handle === false) {
-            throw new FileNotFoundException(
-                sprintf('Error - log file (%s) could not be opened during media export.', $this->logFile)
-            );
-        }
-
-        fputcsv($handle, $content, PHP_EOL);
-        fclose($handle);
+        $this->logger->writeLog($content, $job->getId());
     }
 
     /**
