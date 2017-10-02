@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Snowio\Bundle\CsvConnectorBundle\MediaExport;
 
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
@@ -18,6 +17,10 @@ class Logger
         $this->logDirectory = $logDirectory;
     }
 
+    /**
+     * @param array $content
+     * @param $jobId
+     */
     public function writeLog(array $content, $jobId)
     {
         $logFile = $this->getLogFileNameForJob($jobId);
