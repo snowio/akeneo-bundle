@@ -75,8 +75,6 @@ class MediaExportStep extends AbstractStep
                 $stepExecution->getJobExecution()
             );
 
-            $stepExecution->addSummaryInfo('read', $output[1]);
-            $stepExecution->addSummaryInfo('write', $output[2]);
         } catch(\Exception $e) {
             $this->writeLog(
                 ['Error - something went wrong during media export.', $e->getMessage()],
