@@ -119,3 +119,10 @@ services:
         arguments:
             index_0: 'family'
             index_5: '@snowio_connector.writer.file.csv_family'
+
+    snowio_connector.step.csv_attribute_group.export:
+        class: '%pim_connector.step.item_step.class%'
+        parent: 'pim_connector.step.csv_attribute_group_export.export'
+        arguments:
+            index_0: 'attribute_group'
+            index_5: '@snowio_connector.writer.file.csv_attribute_group'
