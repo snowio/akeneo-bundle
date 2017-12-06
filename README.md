@@ -3,9 +3,9 @@
 This bundle provides a new connector called Snowio Connector that allow us to export all the data from just on job, zip them and send to snowio endpoint.
 
 * Full Job
-    * Export (products, variant groups, categories, attributes, attribute options, and families)  
+    * Export (products, variant groups, categories, attributes, attribute options, families and attribute groups)  
 * Partial Job
-    * Export (categories, attributes, attribute options, and families)
+    * Export (categories, attributes, attribute options, families and attribute groups)
 
 Both of them have as final steps: Generate metadata, Zip files, send to Snowio using Guzzle.
 
@@ -70,6 +70,7 @@ services:
                <b>- '@snowio_connector.step.check_threshold.attributes'</b>
                - '@snowio_connector.step.csv_attribute_option.export'
                - '@snowio_connector.step.csv_family.export'
+               - '@snowio_connector.step.csv_attribute_group.export'
                - '@snowio_connector.step.metadata'
                - '@snowio_connector.step.archive'
                - '@snowio_connector.step.media_export'
