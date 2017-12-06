@@ -75,6 +75,13 @@ class MediaExportStep extends AbstractStep
                 $stepExecution->getJobExecution()
             );
 
+        } catch (FileTransferException $e) {
+            $this->writeLog(
+                ['Error - something went wrong during rsync.', $e->getMessage()],
+                $stepExecution->getJobExecution()
+            );
+
+            //Do not rethrow the exception we want execution to proceed
         } catch(\Exception $e) {
             $this->writeLog(
                 ['Error - something went wrong during media export.', $e->getMessage()],
