@@ -76,3 +76,12 @@ services:
                - '@snowio_connector.step.media_export'
                - '@snowio_connector.step.post'
 <pre><code>
+
+Version ^1.4 introduce new parameters in `app/config/parameters.yml` which need to be added on deployment.
+```
+   media_export_directory: media_export/
+   media_export_host: false
+   media_export_user: false
+   minimum_products_export: 0
+   minimum_attributes_export: 0
+```
