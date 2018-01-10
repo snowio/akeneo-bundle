@@ -39,7 +39,10 @@ trait ConstraintTrait
             'exportDir'     => [
                 new NotBlank(['groups' => ['Default', 'Execution', 'FileConfiguration']]),
                 new WritableDirectory(['groups' => ['Execution', 'FileConfiguration']]),
-            ]
+            ],
+            'rsyncDirectory'     => [],
+            'rsyncUser'     => [],
+            'rsyncHost'     => [],
         ], $simpleFields)]);
     }
 }

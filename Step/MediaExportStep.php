@@ -59,6 +59,11 @@ class MediaExportStep extends AbstractStep
     {
         try {
             $currentExportDir = rtrim($stepExecution->getJobParameters()->get('exportDir'), '/');
+
+            $this->exportLocation->setUser($stepExecution->getJobParameters()->get('rsyncUser'));
+            $this->exportLocation->setHost($stepExecution->getJobParameters()->get('rsyncHost'));
+            $this->exportLocation->setDirectory($stepExecution->getJobParameters()->get('rsyncDirectory'));
+
             $newExportDir = rtrim($this->exportLocation->toString(), '/');
 
             $stepExecution->addSummaryInfo('export_location', $newExportDir);
