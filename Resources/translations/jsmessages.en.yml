@@ -19,4 +19,13 @@ snowio_connector.form.job_instance.tab.properties:
   export_dir:
     title: Export Directory
     help: The directory to store CSV and ZIP files.
+  rsync_directory:
+    title: Rsync Directory
+    help: The directory to rsync images to
+  rsync_user:
+    title: Rsync User
+    help: The user for the media rsync step.
+  rsync_host:
+    title: Rsync Host
+    help: The host for the media rsync step.
 

@@ -44,4 +44,25 @@ class ExportLocation
 
         return $this->directory;
     }
+
+    public function setUser($user)
+    {
+        if (is_string($user) && !empty($user)) {
+            $this->user = $user;
+        }
+    }
+
+    public function setDirectory($directory)
+    {
+        if (is_string($directory) && !empty($directory)) {
+            $this->directory = $directory;
+        }
+    }
+
+    public function setHost($host)
+    {
+        if (is_string($host) && !empty($host)) {
+            $this->host = $host;
+        }
+    }
 }

@@ -131,6 +131,39 @@ extensions:
             label: snowio_connector.form.job_instance.tab.properties.export_dir.title
             tooltip: snowio_connector.form.job_instance.tab.properties.export_dir.help
 
+    snowio-csv-export-edit-properties-rsync-directory:
+        module: pim/job/common/edit/field/text
+        parent: snowio-csv-export-edit-properties
+        position: 190
+        targetZone: global-settings
+        config:
+            fieldCode: configuration.rsyncDirectory
+            readOnly: false
+            label: snowio_connector.form.job_instance.tab.properties.rsync_directory.title
+            tooltip: snowio_connector.form.job_instance.tab.properties.rsync_directory.help
+
+    snowio-csv-export-edit-properties-rsync-user:
+        module: pim/job/common/edit/field/text
+        parent: snowio-csv-export-edit-properties
+        position: 200
+        targetZone: global-settings
+        config:
+            fieldCode: configuration.rsyncUser
+            readOnly: false
+            label: snowio_connector.form.job_instance.tab.properties.rsync_user.title
+            tooltip: snowio_connector.form.job_instance.tab.properties.rsync_user.help
+
+    snowio-csv-export-edit-properties-rsync-host:
+        module: pim/job/common/edit/field/text
+        parent: snowio-csv-export-edit-properties
+        position: 210
+        targetZone: global-settings
+        config:
+            fieldCode: configuration.rsyncHost
+            readOnly: false
+            label: snowio_connector.form.job_instance.tab.properties.rsync_host.title
+            tooltip: snowio_connector.form.job_instance.tab.properties.rsync_host.help
+
     snowio-csv-export-edit-label:
         module: pim/job/common/edit/label
         parent: snowio-csv-export-edit

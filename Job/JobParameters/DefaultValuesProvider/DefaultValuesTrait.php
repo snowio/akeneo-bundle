@@ -21,6 +21,9 @@ trait DefaultValuesTrait
             'applicationId' => '',
             'secretKey'     => '',
             'exportDir'     => '',
+            'rsyncDirectory'=> '',
+            'rsyncUser'     => '',
+            'rsyncHost'     => '',
         ], $simpleDefaults);
     }
 }
