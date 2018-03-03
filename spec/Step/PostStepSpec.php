@@ -73,10 +73,10 @@ class PostStepSpec extends ObjectBehavior
 
         # my step logic assertions
         $execution->addSummaryInfo('endpoint', 'myendpointfortest999')->shouldBeCalled();
-        $execution->addSummaryInfo('response_code', '200')->shouldBeCalled();
+        $execution->addSummaryInfo('response_code', '204')->shouldBeCalled();
         $execution->addSummaryInfo('response_body', 'data received')->shouldBeCalled();
 
-        $response->getStatusCode()->willReturn(200);
+        $response->getStatusCode()->willReturn(204);
 
         $body->getContents()->willReturn('data received');
         $response->getBody()->willReturn($body);
