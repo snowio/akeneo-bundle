@@ -63,7 +63,7 @@ class PostHandler extends AbstractConfigurableStepElement implements StepExecuti
         $this->stepExecution->addSummaryInfo('response_code', $response->getStatusCode());
         $this->stepExecution->addSummaryInfo('response_body', $response->getBody());
 
-        if ($response->getStatusCode() !== 200) {
+        if ($response->getStatusCode() !== 204) {
 //             Unexpected response, handle
             $this->stepExecution->addFailureException(new \Exception('Failed to POST csv data: ' . $response->getBody()));
         }
