@@ -73,7 +73,7 @@ class MediaExportStep extends AbstractStep
                 $this->logger->getLogFileNameForJob($stepExecution->getJobExecution()->getId())
             );
 
-            $output = $this->syncMedia($currentExportDir, $newExportDir);
+            $output = $this->syncMedia($currentExportDir, $newExportDir, $stepExecution->getJobParameters()->get('rsyncOptions'));
 
             $this->writeLog(
                 $this->getModifiedOutputForLog($output, $stepExecution),
@@ -99,17 +99,18 @@ class MediaExportStep extends AbstractStep
     /**
      * @param $currentExportDir
      * @param $newExportDir
+     * @param $options
      * @return array
      * @throws FileTransferException
      * @author James Pollard <jp@amp.co>
      */
-    protected function syncMedia($currentExportDir, $newExportDir)
+    protected function syncMedia($currentExportDir, $newExportDir, $options = '')
     {
         /**
          * append files to the current export dir so that we do not unnecessarily
          * copy over the export csv files
          */
-        exec("rsync -avhK --stats $currentExportDir/files/ $newExportDir/", $output, $status);
+        exec("rsync -aK $options $currentExportDir/files/ $newExportDir/", $output, $status);
 
         if ($status !== 0) {
             throw new FileTransferException('Error - rsync failure during media export.' . implode(" : ", $output));

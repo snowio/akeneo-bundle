@@ -28,4 +28,7 @@ snowio_connector.form.job_instance.tab.properties:
   rsync_host:
     title: Rsync Host
     help: The host for the media rsync step.
+  rsync_options:
+    title: Rsync Options
+    help: Any other rsync options required
 
