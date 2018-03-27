@@ -159,6 +159,17 @@ extensions:
             label: snowio_connector.form.job_instance.tab.properties.rsync_host.title
             tooltip: snowio_connector.form.job_instance.tab.properties.rsync_host.help
 
+    snowio-csv-export-show-properties-rsync-options:
+        module: pim/job/common/edit/field/text
+        parent: snowio-csv-export-show-properties
+        position: 200
+        targetZone: global-settings
+        config:
+            fieldCode: configuration.rsyncOptions
+            readOnly: true
+            label: snowio_connector.form.job_instance.tab.properties.rsync_options.title
+            tooltip: snowio_connector.form.job_instance.tab.properties.rsync_options.help
+
     snowio-csv-export-show-label:
         module: pim/job/common/edit/label
         parent: snowio-csv-export-show

@@ -43,6 +43,7 @@ trait ConstraintTrait
             'rsyncDirectory'     => [],
             'rsyncUser'     => [],
             'rsyncHost'     => [],
+            'rsyncOptions'  => [],
         ], $simpleFields)]);
     }
 }
