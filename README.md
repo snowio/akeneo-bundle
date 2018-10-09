@@ -1,5 +1,7 @@
 # Snowio Bundle for Akeneo
 
+[![Build Status](https://travis-ci.com/snowio/akeneo-bundle.svg?branch=master)](https://travis-ci.com/snowio/akeneo-bundle)
+
 This bundle provides a new connector called Snowio Connector that allow us to export all the data from just on job, zip them and send to snowio endpoint.
 
 * Full Job
