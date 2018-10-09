@@ -20,11 +20,11 @@ class ArchiveStep extends AbstractStep
     private $mediaExportLogger;
 
     /**
-     * @param string                   $name
+     * @param string $name
      * @param EventDispatcherInterface $eventDispatcher
-     * @param JobRepositoryInterface   $jobRepository
-     * @param ZipArchive               $zip
-     * @param string                   $logDir
+     * @param JobRepositoryInterface $jobRepository
+     * @param ZipArchive $zip
+     * @param MediaExport\Logger $mediaExportLogger
      */
     public function __construct(
         $name,
@@ -57,6 +57,7 @@ class ArchiveStep extends AbstractStep
         if ($opened !== true) {
             $stepExecution->addFailureException(new \RuntimeException('Failed to open zip, reason code:' . $opened));
         } else {
+
             $this->zip->addFile(
                 $this->mediaExportLogger->getLogFileNameForJob($stepExecution->getJobExecution()->getId()),
                 '/media_export.log'

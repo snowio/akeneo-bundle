@@ -42,7 +42,7 @@ class ProductConstraintSpec extends ObjectBehavior
         $collection->shouldReturnAnInstanceOf('Symfony\Component\Validator\Constraints\Collection');
         $fields = $collection->fields;
 
-        $fields->shouldHaveCount(8);
+        $fields->shouldHaveCount(12);
         $fields->shouldHaveKey('decimalSeparator');
         $fields->shouldHaveKey('dateFormat');
         $fields->shouldHaveKey('with_media');
@@ -50,5 +50,9 @@ class ProductConstraintSpec extends ObjectBehavior
         $fields->shouldHaveKey('applicationId');
         $fields->shouldHaveKey('secretKey');
         $fields->shouldHaveKey('exportDir');
+        $fields->shouldHaveKey('rsyncDirectory');
+        $fields->shouldHaveKey('rsyncUser');
+        $fields->shouldHaveKey('rsyncHost');
+        $fields->shouldHaveKey('rsyncOptions');
     }
 }
