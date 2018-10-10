@@ -73,7 +73,6 @@ class MetadataStepSpec extends ObjectBehavior
 
         # my step logic assertions
         $execution->addSummaryInfo('metadata_location', $this->directory.'metadata.json')->shouldBeCalled();
-        $execution->addSummaryInfo(Argument::any(), Argument::any())->shouldBeCalled();
 
         # after
         $execution->getExitStatus()->willReturn($exitStatus);
