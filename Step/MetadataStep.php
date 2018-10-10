@@ -49,17 +49,13 @@ class MetadataStep extends AbstractStep
             'withHeader'        => $jobParameters->get('withHeader')
         ];
 
-        $filesChecksum = array_filter(array_map(function($filename) {
-           return strpos($filename, '.csv') ? [ $filename => md5_file($dir.DIRECTORY_SEPARATOR.$filename)] : null;
-        }, scandir($jobParameters->get('exportDir'))));
+        $checksumList = $this->getChecksumList(rtrim($jobParameters->get('exportDir'), '/'));
 
-        if (count($filesChecksum)) {
-            $content['checksum'] = $filesChecksum;
+        $content['checksum'] = $checksumList;
 
-            array_walk($filesChecksum, function($checksum, $filename) use ($stepExecution) {
-                $stepExecution->addSummaryInfo($filename, $checksum);
-            });
-        }
+        array_walk($checksumList, function($checksum, $filename) use ($stepExecution) {
+            $stepExecution->addSummaryInfo($filename, $checksum);
+        });
 
         if ($jobParameters->has('filters')) {
             $content['filters'] = $jobParameters->get('filters');
@@ -78,5 +74,26 @@ class MetadataStep extends AbstractStep
         }
 
         return json_encode($content);
+    }
+
+    private function getChecksumList($exportDir)
+    {
+        $checksumList = [];
+
+        $filesChecksum = array_filter(array_map(function($filename) use ($exportDir){
+            return (strpos($filename, '.csv') ) ? [
+                'filename' => $filename,
+                'checksum' => md5_file($exportDir.DIRECTORY_SEPARATOR.$filename)]
+                : null;
+        }, scandir($exportDir)));
+
+        if (count($filesChecksum)) {
+            $checksumList = array_combine(
+                array_column($filesChecksum, 'filename'),
+                array_column($filesChecksum, 'checksum')
+            );
+        }
+
+        return $checksumList;
     }
 }
