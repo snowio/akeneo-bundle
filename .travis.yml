@@ -1,0 +1,14 @@
+language: php
+php: 5.6
+before_install:
+  - composer self-update
+  - if [[ -n $GITHUB_TOKEN ]]; then composer config github-oauth.github.com $GITHUB_TOKEN; fi
+  - if [[ -n $PACKAGIST_TOKEN ]]; then composer config http-basic.repo.packagist.com token $PACKAGIST_TOKEN; fi
+install:
+  - COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install --prefer-dist --no-interaction
+script: 
+  - php vendor/phpspec/phpspec/bin/phpspec run -c phpspec.yml
+after_success: 
+  - bash <(curl -s https://codecov.io/bash)
+cache:
+  directories: vendor

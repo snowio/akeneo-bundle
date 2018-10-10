@@ -12,6 +12,7 @@ use Akeneo\Component\Batch\Event\EventInterface;
 use Akeneo\Component\Batch\Job\JobParameters;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
+use Snowio\Bundle\CsvConnectorBundle\MediaExport;
 use Prophecy\Argument;
 use \ZipArchive;
 
@@ -23,11 +24,12 @@ class ArchiveStepSpec extends ObjectBehavior
     public function let(
         EventDispatcherInterface $dispatcher,
         JobRepositoryInterface $respository,
-        ZipArchive $zip
+        ZipArchive $zip,
+        MediaExport\Logger $logger
     ) {
         $this->directory = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'spec' . DIRECTORY_SEPARATOR;
 
-        $this->beConstructedWith(['job_test_name'], $dispatcher, $respository, $zip);
+        $this->beConstructedWith(['job_test_name'], $dispatcher, $respository, $zip, $logger);
     }
 
     // @codingStandardsIgnoreLine
@@ -42,6 +44,7 @@ class ArchiveStepSpec extends ObjectBehavior
     ) {
         $jobParameters->get('exportDir')->willReturn($this->directory);
         $execution->getJobParameters()->willReturn($jobParameters);
+        $execution->getId()->willReturn('1');
         $execution->getJobExecution()->willReturn($execution);
 
         # before
@@ -53,6 +56,9 @@ class ArchiveStepSpec extends ObjectBehavior
         $execution->upgradeStatus(Argument::any())->shouldBeCalled();
 
         $zip->open(Argument::any(), Argument::any())->willReturn(true);
+
+        $zip->addFile(Argument::any(), Argument::any())->willReturn(true);
+
         $zip->addPattern(Argument::any(), Argument::any(), Argument::any())->willReturn(array(
             '/tmp/metadata.json',
             '/tmp/anotherfile.csv'
@@ -84,7 +90,6 @@ class ArchiveStepSpec extends ObjectBehavior
         ExitStatus $exitStatus,
         $zip
     ) {
-        
         $jobParameters->get('exportDir')->willReturn($this->directory);
         $execution->getJobParameters()->willReturn($jobParameters);
         $execution->getJobExecution()->willReturn($execution);
@@ -109,8 +114,8 @@ class ArchiveStepSpec extends ObjectBehavior
         $exitStatus->getExitCode()->willReturn(ExitStatus::COMPLETED);
         $execution->isTerminateOnly()->willReturn(false);
         $execution->upgradeStatus(Argument::any())->shouldBeCalled();
-        $dispatcher->dispatch(EventInterface::STEP_EXECUTION_SUCCEEDED, Argument::any())->shouldBeCalled();
         $dispatcher->dispatch(EventInterface::STEP_EXECUTION_COMPLETED, Argument::any())->shouldBeCalled();
+        $dispatcher->dispatch(EventInterface::STEP_EXECUTION_ERRORED, Argument::any())->shouldBeCalled();
         $execution->setEndTime(Argument::any())->shouldBeCalled();
         $execution->setExitStatus(Argument::any())->shouldBeCalled();
 
