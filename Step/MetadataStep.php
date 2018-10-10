@@ -49,6 +49,18 @@ class MetadataStep extends AbstractStep
             'withHeader'        => $jobParameters->get('withHeader')
         ];
 
+        $filesChecksum = array_filter(array_map(function($filename) {
+           return strpos($filename, '.csv') ? [ $filename => md5_file($dir.DIRECTORY_SEPARATOR.$filename)] : null;
+        }, scandir($jobParameters->get('exportDir'))));
+
+        if (count($filesChecksum)) {
+            $content['checksum'] = $filesChecksum;
+
+            array_walk($filesChecksum, function($checksum, $filename) use ($stepExecution) {
+                $stepExecution->addSummaryInfo($filename, $checksum);
+            });
+        }
+
         if ($jobParameters->has('filters')) {
             $content['filters'] = $jobParameters->get('filters');
         }
